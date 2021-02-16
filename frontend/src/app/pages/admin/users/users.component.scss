@@ -1,0 +1,16 @@
+::ng-deep {
+    .ui-table-users .p-datatable {
+        margin: 1rem 3rem 1rem 3rem;
+        -webkit-box-shadow: -1px 2px 25px -1px rgba(34, 60, 80, 0.6);
+        -moz-box-shadow: -1px 2px 25px -1px rgba(34, 60, 80, 0.6);
+        box-shadow: -1px 2px 25px -1px rgba(34, 60, 80, 0.6);
+    }
+
+    .ui-add-user-btn.p-button {
+        margin: 0 0 .5rem 3rem;
+    }
+}
+
+.title {
+    margin-left: 3.3rem;
+}

@@ -1,0 +1,40 @@
+<!-- <p-tabMenu [model]="items" [activeItem]="activeItem" class="ui-header-adm"></p-tabMenu> -->
+<!-- <p-menubar [model]="items"></p-menubar> -->
+
+<header class="ui-header p-d-flex p-ai-center">
+
+    <div class="p-mr-2 ui-header-item logo">
+        <p>Сводки с/х</p>
+    </div>
+
+    <div
+        class="p-mr-2 ui-header-item ui-men-btn"
+        routerLinkActive="active"
+        [routerLink]="['/svod-table']"
+    >
+        <p>Итоговая таблица</p>
+    </div>
+
+    <div
+        *ngIf="isAdmin"
+        class="p-mr-2 ui-header-item ui-men-btn"
+        routerLinkActive="active"
+        [routerLink]="['/sv-admin', 'users']"
+    >
+        <p>Пользователи</p>
+    </div>
+
+    <div class="p-mr-2 ui-header-item p-ml-auto">
+        <p>{{currentDate}}</p>
+    </div>
+
+    <div class="p-mr-2 ui-header-item ui-u-name p-ml-auto">
+        <p>{{currentUserName}}</p>
+    </div>
+
+    <div class="p-mr-2 ui-header-item ui-men-btn" (click)="onLogout()">
+        <p>Выйти</p>
+    </div>
+
+</header>
+

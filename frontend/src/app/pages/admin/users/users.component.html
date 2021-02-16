@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="title">
+        <h2>Список пользователей</h2>
+    </div>
+
+    <button
+        pButton
+        type="button"
+        icon="pi pi-user-plus"
+        class="ui-add-user-btn"
+        label="Добавить нового пользователя"
+        (click)="addNew()"
+    ></button>
+
+    <p-table [value]="users" [scrollable]="scrollable" scrollHeight="550px" class="ui-table-users">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem; text-align: center">#</th>
+                <th>Имя пользователя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th style="width: 8rem; text-align: center">Редактировать</th>
+                <th style="width: 8rem; text-align: center">Изменить пароль</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user let-i="rowIndex">
+            <tr>
+                <td style="width: 3rem; text-align: center">{{i + 1}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{getReadabilityRole(user.role)}}</td>
+                <td style="text-align: center">
+                    <button
+                        pButton
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-rounded"
+                        (click)="editUser(user.userId, user.name)"
+                    ></button>
+                </td>
+                <td style="text-align: center">
+                    <button
+                        pButton
+                        type="button"
+                        icon="pi pi-key"
+                        class="p-button-secondary p-button-rounded"
+                        (click)="changePassword(user.userId, user.name)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

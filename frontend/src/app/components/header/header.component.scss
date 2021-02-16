@@ -1,0 +1,77 @@
+::ng-deep {
+    .p-mr-2 {
+        margin-right: 0 !important;
+    }
+}
+
+.ui-header {
+    width: 100%;
+    background-color: #1a531a;
+    color: #ffffff;
+}
+
+.ui-u-name {
+    padding-right: 1rem;
+}
+
+.logo {
+    background-color: #444;
+    font-size: large;
+    font-weight: 600;
+    padding: 0 2.5rem;
+}
+
+.ui-men-btn {
+    cursor: pointer;
+    padding: .2rem 1rem;
+    // color: #55b2ff;
+    background-color: #244a6e;
+}
+
+.ui-men-btn:hover {
+    // background-color: #517551;
+    background-color: #518cbe;
+    color: #000000
+}
+
+.ui-header > .active {
+    background-color: #759c75;
+    color: #000;
+}
+
+
+
+
+
+
+
+
+
+
+// ::ng-deep {
+//     .ui-header-adm .p-tabmenu ul li:nth-last-child(-n+2) {
+//         margin-left: auto;
+//     }
+
+//     .ui-header-adm .p-tabmenu-nav {
+//         background-color: #273342 !important;
+//     }
+
+//     .ui-header-adm .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+//         background-color: #273342 !important;
+//         color: #ffffff !important;
+//     }
+
+//     .ui-header-adm .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link-active {
+//         background-color: #273342 !important;
+//         color: #2296F3 !important;
+//     }
+
+//     // .ui-header-adm .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+//     //     border-width: 1px 0 0 0;
+//     // }
+
+//     .ui-header-adm .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link:hover {
+//         color: #b6b6b6 !important;
+//     }
+// }

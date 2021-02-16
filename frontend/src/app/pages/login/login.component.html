@@ -1,0 +1,35 @@
+<div class="root p-d-flex p-jc-center p-ai-center">
+    <p-panel [formGroup]="form">
+        <ng-template pTemplate="header">
+            <div class="title p-text-bold">Сводки с/х</div>
+        </ng-template>
+
+            <div class="label-inp">Вход в систему:</div>
+
+            <div class="p-mb-2">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input type="text" pInputText placeholder="Логин" formControlName="email">
+                </div>
+            </div>
+
+            <div class="p-mb-2">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
+                    <input type="password" pInputText placeholder="Пароль" formControlName="password">
+                </div>
+            </div>
+
+            <p-button
+                [disabled]="form.invalid"
+                type="submit"
+                styleClass="p-button"
+                label="Войти"
+                (click)="onSubmit()"
+            ></p-button>
+
+        <ng-template pTemplate="footer">
+            КУП "ИВЦ Гомельоблсельхозпрода"
+        </ng-template>
+    </p-panel>
+</div>

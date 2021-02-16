@@ -1,0 +1,26 @@
+<div [formGroup]="form">
+    <div class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
+            <input type="password" pInputText placeholder="Новый пароль" formControlName="password">
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
+            <input type="password" pInputText placeholder="Повторите новый пароль" formControlName="repeatPassword">
+        </div>
+    </div>
+
+    <button
+        pButton
+        icon="pi pi-check"
+        [disabled]="form.invalid || form.disabled
+            || form.get('password').value !== form.get('repeatPassword').value"
+        type="button"
+        class="p-button-success dial-ed-pass"
+        label="Сохранить"
+        (click)="onSubmit()"
+    ></button>
+</div>
