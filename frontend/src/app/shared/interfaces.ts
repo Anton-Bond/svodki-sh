@@ -10,3 +10,11 @@ export interface Message {
     type: string
     text: string
 }
+
+export interface Svtable {
+    svtableId: string
+    svtableDate: string
+    name: string
+    header: Object[]
+    data: Object[]
+}

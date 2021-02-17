@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.currentDate = moment().lang('ru').format('LL')
+        this.currentDate = moment().locale('ru').format('LL')
         this.currentUserName = this.authService.getCurrentUser().name
         this.isAdmin = this.authService.getCurrentUser().role === ROLE.ADMIN
     }

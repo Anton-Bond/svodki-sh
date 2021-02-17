@@ -20,12 +20,10 @@ export class UsersService {
         return this.http.get<User[]>(`${DB.url}/api/user`)
     }
 
-    // get array of users from url and return user by email or null
     getById(userId: string): Observable<User> {
         return this.http.get<User>(`${DB.url}/api/user/${userId}`)
     }
 
-    // new
     create(user: User) {
         return this.http.post<User>(
             `${DB.url}/api/user/new`,

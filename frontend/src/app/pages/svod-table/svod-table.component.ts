@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+
+import { Svtable } from '../../shared/interfaces'
+import { SvtablesService } from '../../services/svtables.service'
 
 @Component({
     selector: 'app-svod-table',
@@ -7,18 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SvodTableComponent implements OnInit {
 
-    // products: Object[] = [
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'},
-    //     {code: '1-2', name: 'some name', category: 'categ', quantity: 'bla-bla'}
-    // ]
+// products: Object[] = [{}, ...]
 
     reg: Object[] = [
         { name: 'Брагинский', a: '45', b: '5', c: '26', e: '7', f: '83', g: '9', h: '10', k: '14', l: '12' },
@@ -44,9 +36,16 @@ export class SvodTableComponent implements OnInit {
         { name: 'Чечерский', a: '8', b: '8', c: '96', e: '69', f: '69', g: '38', h: '53', k: '53', l: '87' },
     ]
 
-    constructor() { }
+    constructor(private svtablesService: SvtablesService) { }
 
     ngOnInit(): void {
+        this.fetchCurrentTable()
+    }
+
+    fetchCurrentTable() {
+        this.svtablesService.getByDate('17-02-2021').subscribe((svtable: Svtable) => {
+            console.log(svtable)
+        })
     }
 
 }

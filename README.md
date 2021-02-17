@@ -1,6 +1,11 @@
 # Svodki
 
 API
+
+=====================================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++ USER ++++++++++++++++++++++++++++++++++++++++++++
+=====================================================================================================
+
 ----------------------------LOGIN
 /api/auth/registration
 
@@ -61,7 +66,7 @@ RESPONSE
 }
 
 ------------------------------- UPDATE BY ID
-PUT: /api/user/:id
+PUT: /api/user/:userId
 
 BODY
 {
@@ -83,7 +88,7 @@ RESPONSE
 }
 
 -------------------------------- UPDATE USER PASSWORD
-PUT: /api/user/passw/:id
+PUT: /api/user/passw/:userId
 
 BODY
 {
@@ -102,7 +107,7 @@ RESPONSE
 }
 
 ----------------------------------- DELETE USER BY ID
-DELETE: /api/user/:id
+DELETE: /api/user/:userId
 
 BODY
 {}
@@ -118,6 +123,79 @@ RESPONSE
     "__v": 0
 }
 
+=====================================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++ SVTABLE ++++++++++++++++++++++++++++++++++++++++++++
+=====================================================================================================
+
+---------------------------------- CREATE
+POST: /api/sv-table/new
+
+BODY
+{
+  "svtableId": "string",
+  "svtableDate": "string",
+  "header": Array,
+  "data": "Array"
+}
+
+RESPONSE
+{
+  "_id": "string",
+  "svtableId": "string",
+  "svtableDate": "string",
+  "header": "[...]",
+  "data": "[...]"
+  "__v": 0
+}
+
+--------------------------------- GET BY DATE
+GET: /api/sv-table/:svtableDate
+
+BODY
+{}
+
+RESPONSE
+{
+  "_id": "string",
+  "svtableId": "string",
+  "svtableDate": "string",
+  "header": "[...]",
+  "data": "[...]"
+  "__v": 0
+}
+
+-----------------------------------  SET TABLES ON CURRENT DATE
+POST: /api/sv-table/on-current-date/:currentDate
+
+BODY
+{
+    "tableList": ["_id", ...]
+}
+
+RESPONSE   (old data)
+{
+    "tableList": ["_id", ...],
+    "_id": "string",
+    "date": "string",
+    "__v": 0
+}
+-------------------------------------  GET TABLES ON CURRENT DATE
+GET: /api/sv-table/on-current-date/:currentDate
+
+BODY
+{}
+
+RESPONSE   (old data)
+[
+    {
+        "svtableId": "string",
+        "svtableDate": "string",
+        "name": "string",
+        "header": [],
+        "data": []
+    },
+    ...
+]
 
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++

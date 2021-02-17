@@ -9,6 +9,9 @@ const svtableSchema = new Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String
+    },
     header: {
         type: String
     },
