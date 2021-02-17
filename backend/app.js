@@ -4,7 +4,7 @@ const app = express()
 
 const userRoutes = require('./routes/userRouter')
 const authRoutes = require('./routes/authRouter')
-const tableRoutes = require('./routes/tableRouter')
+const svtableRoutes = require('./routes/svtableRouter')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -13,7 +13,7 @@ app.use(require('cors')())
 // ===================== ROUTES ====================
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
-app.use('/api/sv-table', tableRoutes)
+app.use('/api/sv-table', svtableRoutes)
 // =================== END ROUTES ==================
 
 // catch 404 and forward to error handler

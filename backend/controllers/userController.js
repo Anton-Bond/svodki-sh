@@ -3,18 +3,14 @@ const { v4: uuidv4 } = require('uuid');
 
 const User = require('../models/user.model');
 
-// create new user
 module.exports.create = async function (req, res) {
-    // find user from DB by email
     const candidate = await User.findOne({ email: req.body.email });
 
     if (candidate) {
-        // user is exist, send error
         res.status(409).json({
             message: 'Такой email уже занят. Попробуйте другой.',
         });
     } else {
-        // create new user
         const salt = bcrypt.genSaltSync(10);
         const password = req.body.password;
         const user = new User({
@@ -34,7 +30,6 @@ module.exports.create = async function (req, res) {
     }
 };
 
-// Recieve all Users from the database
 module.exports.getAll = async (req, res) => {
     try {
         const users = await User.find();
@@ -44,7 +39,6 @@ module.exports.getAll = async (req, res) => {
     }
 };
 
-// Recieve User by id from the database
 module.exports.findById = async (req, res) => {
     try {
         const user = await User.findOne({ userId: req.params.userId })
@@ -59,7 +53,6 @@ module.exports.findById = async (req, res) => {
 };
 
 module.exports.update = async (req, res) => {
-    // Validate request
     if (!req.body) {
         res.status(400).send({
             message: 'Content can not be empty!',
@@ -107,7 +100,6 @@ module.exports.updatePassw = async (req, res) => {
 module.exports.removeById = async (req, res) => {
     try {
         const user = await User.findOneAndRemove(req.params.userId);
-        // await User.findByIdAndRemove(req.params.id);
         res.status(200).json(user);
     } catch (e) {
         res.status(404).send(e.message || 'Some error occurred while removing User.');
