@@ -15,7 +15,13 @@
 }
 
 .ui-col-idx {
+    cursor: pointer;
     text-align: center !important;
+    padding: 0 !important;
+}
+
+.ui-col-idx>p {
     font-size: 10px;
     padding: .2rem !important;
+    margin: 0 !important;
 }

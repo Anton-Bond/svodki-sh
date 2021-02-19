@@ -33,6 +33,13 @@ import { EditPassUserComponent } from './pages/admin/edit-pass-user/edit-pass-us
 import { AddNewUserComponent } from './pages/admin/add-new-user/add-new-user.component';
 import { SvodTableComponent } from './pages/svod-table/svod-table.component';
 import { AddNewSvtableComponent } from './pages/svod-table/add-new-svtable/add-new-svtable.component';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { ToastModule } from 'primeng/toast';
+import { CalendarModule } from 'primeng/calendar';
+import { SliderModule } from 'primeng/slider';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
     declarations: [
@@ -70,6 +77,13 @@ import { AddNewSvtableComponent } from './pages/svod-table/add-new-svtable/add-n
         TabMenuModule,
         DropdownModule,
         DynamicDialogModule,
+        ContextMenuModule,
+        ToastModule,
+        CalendarModule,
+        SliderModule,
+        MultiSelectModule,
+        DialogModule,
+        ProgressBarModule,
 
         AppRoutingModule       // can be last
     ],
