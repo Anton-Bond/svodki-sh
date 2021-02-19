@@ -32,6 +32,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { EditPassUserComponent } from './pages/admin/edit-pass-user/edit-pass-user.component';
 import { AddNewUserComponent } from './pages/admin/add-new-user/add-new-user.component';
 import { SvodTableComponent } from './pages/svod-table/svod-table.component';
+import { AddNewSvtableComponent } from './pages/svod-table/add-new-svtable/add-new-svtable.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { SvodTableComponent } from './pages/svod-table/svod-table.component';
         EditPassUserComponent,
         AddNewUserComponent,
         SvodTableComponent,
+        AddNewSvtableComponent,
     ],
     imports: [
         BrowserModule,

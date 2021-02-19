@@ -1,0 +1,105 @@
+<p-table
+    id="ui-new-svtable"
+    [columns]="svtable.cols"
+    [value]="svtable.rows"
+    styleClass="p-datatable-gridlines p-datatable-sm"
+    [resizableColumns]="true"
+    columnResizeMode="expand"
+>
+    <ng-template pTemplate="caption">
+        <input type="text" pInputText [(ngModel)]="svtable.name"/>
+        <p-button label="add col" (click)="addColumn()"></p-button>
+        <button pButton type="button" label="show table" class="p-button-help" (click)="showTable()"></button>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th width="145px" rowspan="2">Наименование района</th>
+            <th pResizableColumn *ngFor="let col of columns">
+                <input type="text" pInputText [(ngModel)]="col.header"/>
+            </th>
+            <th  rowspan="2">
+                <i class="pi pi-plus ui-icon-clickable" (click)="addColumnToTheEnd()"></i>
+            </th>
+        </tr>
+        <tr>
+            <th
+                pResizableColumn
+                class="ui-col-idx"
+                [ngStyle]="{'background-color': col.idx === currentCol ? '#4a4a4a' : 'inherit', 'color': col.idx === currentCol ? '#ffffff' : 'inherit'}"
+                *ngFor="let col of columns"
+                (click)="setCurrentCol(col.idx)"
+            >
+                {{'C' + col.idx}}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td style="font-weight: 600;">{{rowData.data[0]}}</td>
+            <td *ngFor="let col of columns">
+                <input type="text" pInputText [(ngModel)]="rowData.data[col.idx]"/>
+            </td>
+            <td></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+
+    </ng-template>
+</p-table>
+
+
+
+<!-- REGION DATA HOW OBJECTY -->
+
+<!-- <p-table
+    id="ui-new-svtable"
+    [columns]="svtable.cols"
+    [value]="svtable.rows"
+    styleClass="p-datatable-gridlines p-datatable-sm"
+    [resizableColumns]="true"
+    columnResizeMode="expand"
+>
+    <ng-template pTemplate="caption">
+        <input type="text" pInputText [(ngModel)]="svtable.name"/>
+        <p-button label="add col" (click)="addColumn()"></p-button>
+        <button pButton type="button" label="show table" class="p-button-help" (click)="showTable()"></button>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th width="145px" rowspan="2">Наименование района</th>
+            <th pResizableColumn *ngFor="let col of columns">
+                <input type="text" pInputText [(ngModel)]="col.header"/>
+            </th>
+            <th  rowspan="2">
+                <i class="pi pi-plus ui-icon-clickable" (click)="addColumnToTheEnd()"></i>
+            </th>
+        </tr>
+        <tr>
+            <th
+                pResizableColumn
+                class="ui-col-idx"
+                [ngStyle]="{'background-color': col.idx === currentCol ? '#4a4a4a' : 'inherit', 'color': col.idx === currentCol ? '#ffffff' : 'inherit'}"
+                *ngFor="let col of columns"
+                (click)="setCurrentCol(col.idx)"
+            >
+                {{'C' + col.idx}}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td style="font-weight: 600;">{{translateCode(rowData.region)}}</td>
+            <td *ngFor="let col of columns">
+                <input type="text" pInputText [(ngModel)]="rowData['C' + col.idx]"/>
+            </td>
+            <td></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+
+    </ng-template>
+</p-table> -->

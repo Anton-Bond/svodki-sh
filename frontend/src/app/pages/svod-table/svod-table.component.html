@@ -1,47 +1,100 @@
 <div class="root">
-    <div class="page">
-        <!-- HEADER -->
-        <app-header></app-header>
+    <app-header></app-header>
+    <div class="table-tabs">
+        <ul>
+            <li
+                *ngFor="let tab of svtables; let i = index"
+                class="active-tab"
+                [ngStyle]="{'color': activeTab === i ? '#015fc2f0' : 'inherit', 'border-bottom':  activeTab === i ? '2px solid #015fc2f0' : '2px solid #c9c9c9'}"
+                (click)="toggleTab(i)"
+            >{{tab.name ? tab.name : 'Без названия'}}</li>
+            <li
+                [ngStyle]="{'color': activeTab === -1 ? '#015fc2f0' : 'inherit'}"
+                (click)="createNewTable()"
+            ><i class="pi pi-plus"></i></li>
+        </ul>
+    </div>
 
-        <div>
+    <div class="card">
+        <app-add-new-svtable *ngIf="activeTab === -1"></app-add-new-svtable>
 
-            <p-table [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm">
-                <ng-template pTemplate="caption">
-                    Информация об уборке кукурузы (зерновая группа)
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Наименование районов</th>
-                        <th>Наличие кок-6(8)</th>
-                        <th>Работ агрег кок-4,2</th>
-                        <th>Выр. на 1 агрегат. Га</th>
-                        <th>Заплющ. зерна, тн</th>
-                        <th>в т. ч. за день</th>
-                        <th>Налич. плющ, шт </th>
-                        <th>в т.ч. в рукав</th>
-                        <th>Кол работ-х плющ.</th>
-                        <th>Выр. на плющ, тн</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-reg>
-                    <tr>
-                        <td style="font-weight: 600;">{{reg.name}}</td>
-                        <td>{{reg.a}}</td>
-                        <td>{{reg.b}}</td>
-                        <td>{{reg.c}}</td>
-                        <td>{{reg.e}}</td>
-                        <td>{{reg.f}}</td>
-                        <td>{{reg.g}}</td>
-                        <td>{{reg.h}}</td>
-                        <td>{{reg.k}}</td>
-                        <td>{{reg.l}}</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="summary">
+        <p-table *ngIf="activeTab >=0" [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm" [resizableColumns]="true" columnResizeMode="expand">
+            <ng-template pTemplate="caption">
+                Информация об уборке кукурузы (зерновая группа)
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Наименование районов</th>
+                    <th>Наличие кок-6(8)</th>
+                    <th>Работ агрег кок-4,2</th>
+                    <th>Выр. на 1 агрегат. Га</th>
+                    <th>Заплющ. зерна, тн</th>
+                    <th>в т. ч. за день</th>
+                    <th>Налич. плющ, шт </th>
+                    <th>в т.ч. в рукав</th>
+                    <th>Кол работ-х плющ.</th>
+                    <th>Выр. на плющ, тн</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-reg>
+                <tr>
+                    <td style="font-weight: 600;">{{reg.name}}</td>
+                    <td>{{reg.a}}</td>
+                    <td>{{reg.b}}</td>
+                    <td>{{reg.c}}</td>
+                    <td>{{reg.e}}</td>
+                    <td>{{reg.f}}</td>
+                    <td>{{reg.g}}</td>
+                    <td>{{reg.h}}</td>
+                    <td>{{reg.k}}</td>
+                    <td>{{reg.l}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
 
-                </ng-template>
-              </p-table>
-
-        </div>
+            </ng-template>
+        </p-table>
     </div>
 </div>
+
+
+
+
+
+
+<!-- <p-table [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm">
+    <ng-template pTemplate="caption">
+        Информация об уборке кукурузы (зерновая группа)
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Наименование районов</th>
+            <th>Наличие кок-6(8)</th>
+            <th>Работ агрег кок-4,2</th>
+            <th>Выр. на 1 агрегат. Га</th>
+            <th>Заплющ. зерна, тн</th>
+            <th>в т. ч. за день</th>
+            <th>Налич. плющ, шт </th>
+            <th>в т.ч. в рукав</th>
+            <th>Кол работ-х плющ.</th>
+            <th>Выр. на плющ, тн</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-reg>
+        <tr>
+            <td style="font-weight: 600;">{{reg.name}}</td>
+            <td>{{reg.a}}</td>
+            <td>{{reg.b}}</td>
+            <td>{{reg.c}}</td>
+            <td>{{reg.e}}</td>
+            <td>{{reg.f}}</td>
+            <td>{{reg.g}}</td>
+            <td>{{reg.h}}</td>
+            <td>{{reg.k}}</td>
+            <td>{{reg.l}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+
+    </ng-template>
+  </p-table> -->
