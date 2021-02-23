@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
     scrollable: boolean = false
 
     constructor(
-        public dialogService: DialogService,
+        private dialogService: DialogService,
         private usersService: UsersService,
         private route: ActivatedRoute
     ) {}

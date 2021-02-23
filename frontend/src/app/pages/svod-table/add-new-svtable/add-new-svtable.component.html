@@ -8,20 +8,31 @@
     [resizableColumns]="true"
     columnResizeMode="expand"
     [(contextMenuSelection)]="selectedCol" [contextMenu]="cm" dataKey="code"
+    [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-300)+'px'}}" frozenWidth="145px"
 >
     <ng-template pTemplate="caption">
-        <input type="text" pInputText [(ngModel)]="svtable.name"/>
-        <button pButton type="button" label="show table" class="p-button-help" (click)="showTable()"></button>
+        <span class="p-float-label" [style]="{width: '50%'}">
+            <input id="uiloat-input" type="text" pInputText [(ngModel)]="svtable.name" [style]="{width: '100%'}" />
+            <label for="uiloat-input">Название таблицы</label>
+        </span>
+
+        <div class="ui-tadd-btngroup">
+            <button pButton icon="pi pi-save" type="button" label="Сохранить" (click)="showTable()"></button>
+            <button pButton icon="pi pi-times" type="button" label="Отмена" class="p-button-secondary" (click)="showTable()"></button>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" style="width:145px">
+        </colgroup>
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th width="145px" rowspan="2">Наименование района</th>
             <th pResizableColumn *ngFor="let col of columns">
-                <input type="text" pInputText [(ngModel)]="col.header"/>
-            </th>
-            <th width="30px" rowspan="2">
-                <i class="pi pi-plus ui-icon-clickable" (click)="addColumnToTheEnd()"></i>
+                <input *ngIf="col.type !== 'name'" type="text" pInputText [(ngModel)]="col.header" class="ui-add-t-input-header" />
+                <p *ngIf="col.type === 'name'" class="ui-add-t-name-header">{{col.header}}</p>
             </th>
         </tr>
         <tr>
@@ -31,10 +42,88 @@
                 class="ui-col-idx"
                 *ngFor="let col of columns"
             >
-                <p>{{'C' + col.idx}}</p>
+                <p [ngStyle]="{'background-color': col.type === 'formula' ? '#ffdede' : 'inherit'}">
+                    {{utilsService.numberToLetter(col.idx)}}
+                </p>
             </th>
         </tr>
     </ng-template>
+
+    <!-- SHOW WITH ALL REGIONS -->
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                <span *ngIf="col.type === 'formula'">
+                    <label class="ui-add-t-name-body">f = </label>
+                    <input
+                        pInputText
+                        [disabled]="true"
+                        type="text" pInputText
+                        [(ngModel)]="rowData.data[col.idx]"
+                        class="p-inputtext-sm"
+                        [ngStyle]="{'width': '70%'}"
+                    />
+                    <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.idx, rowData.data[col.idx])"></i>
+                </span>
+                <input
+                    *ngIf="col.type === 'value'"
+                    type="text" pInputText
+                    [(ngModel)]="rowData.data[col.idx]"
+                    class="ui-add-t-input-data p-inputtext-sm"
+                />
+                <p *ngIf="col.type === 'name'" class="ui-add-t-name-body">{{rowData.data[col.idx]}}</p>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+
+    </ng-template>
+</p-table>
+
+
+
+
+
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<p-table
+    id="ui-new-svtable"
+    [columns]="svtable.cols"
+    [value]="svtable.rows"
+    styleClass="p-datatable-gridlines p-datatable-sm"
+    [resizableColumns]="true"
+    columnResizeMode="expand"
+    [(contextMenuSelection)]="selectedCol" [contextMenu]="cm" dataKey="code"
+>
+    <ng-template pTemplate="caption">
+        <input type="text" pInputText [(ngModel)]="svtable.name"/>
+        <button pButton type="button" label="show table" class="p-button-help" (click)="showTable()"></button>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th width="145px">Наименование района</th>
+            <th pResizableColumn *ngFor="let col of columns" width="120px">
+                <input type="text" pInputText [(ngModel)]="col.header"/>
+            </th>
+            <th width="30px" rowspan="2">
+                <i class="pi pi-plus ui-icon-clickable" (click)="addColumnToTheEnd()"></i>
+            </th>
+        </tr>
+        <tr>
+            <th [pContextMenuRow]="0" class="ui-col-idx"><p>C0</p></th>
+            <th
+                [pContextMenuRow]="col.idx"
+                pResizableColumn
+                class="ui-col-idx"
+                *ngFor="let col of columns"
+            >
+                <p>{{'C' + col.idx}}</p>
+            </th>
+        </tr>
+    </ng-template> -->
 
     <!-- TO DO: SHOW ONLY ONE LINE (it's better)-->
     <!-- <ng-template pTemplate="body" let-columns="columns">
@@ -48,7 +137,7 @@
     </ng-template> -->
 
     <!-- SHOW WITH ALL REGIONS -->
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <!-- <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
             <td style="font-weight: 600;">{{rowData.data[0]}}</td>
             <td *ngFor="let col of columns">
@@ -60,4 +149,4 @@
     <ng-template pTemplate="summary">
 
     </ng-template>
-</p-table>
+</p-table> -->

@@ -40,6 +40,7 @@ import { SliderModule } from 'primeng/slider';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { FormulaInputModalComponent } from './components/formula-input-modal/formula-input-modal.component';
 
 @NgModule({
     declarations: [
@@ -54,6 +55,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
         AddNewUserComponent,
         SvodTableComponent,
         AddNewSvtableComponent,
+        FormulaInputModalComponent,
     ],
     imports: [
         BrowserModule,
