@@ -8,7 +8,7 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog'
 
 import { User } from '../../../shared/interfaces';
 import { UsersService } from '../../../services/users.service';
-import { ROLES } from '../../../shared/constants';
+import { ROLES, ROLE, REGIONS } from '../../../shared/constants';
 
 @Component({
   selector: 'app-edit-user',
@@ -21,6 +21,9 @@ export class EditUserComponent implements OnInit {
     user: User
     roles: Object[] = ROLES
     userId: string = ''
+    noeditable: boolean = true
+    someRegion: string = ROLE.REGION
+    regions: any[] = REGIONS
 
     constructor(
         private route: ActivatedRoute,
@@ -63,6 +66,7 @@ export class EditUserComponent implements OnInit {
 
                     this.form.enable()
                     this.isLoaded = true
+                    this.noeditable = user.role === ROLE.REGION || user.email === 'admin@test.by'
                 },
                 (error) => alert(error.error.message)
             )

@@ -38,4 +38,8 @@ export class SvtablesService {
             // })))
     }
 
+    addNew(svtable: Svtable): Observable<Svtable> {
+        return this.http.post<Svtable>(`${DB.url}/api/sv-table/new`, svtable, this.httpOptions)
+    }
+
 }

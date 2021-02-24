@@ -26,7 +26,7 @@
         <ng-template pTemplate="body" let-user let-i="rowIndex">
             <tr>
                 <td style="width: 3rem; text-align: center">{{i + 1}}</td>
-                <td>{{user.name}}</td>
+                <td>{{getReadabilityRegName(user.name)}}</td>
                 <td>{{user.email}}</td>
                 <td>{{getReadabilityRole(user.role)}}</td>
                 <td style="text-align: center">

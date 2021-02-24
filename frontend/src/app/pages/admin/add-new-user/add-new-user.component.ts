@@ -4,7 +4,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
 
 import { UsersService } from '../../../services/users.service';
-import { ROLES } from '../../../shared/constants';
+import { ROLES, REGIONS, ROLE } from '../../../shared/constants';
 
 @Component({
     selector: 'app-add-new-user',
@@ -13,7 +13,9 @@ import { ROLES } from '../../../shared/constants';
 })
 export class AddNewUserComponent implements OnInit {
     form: FormGroup
-    roles: Object[] = ROLES
+    roles: any[] = ROLES
+    someRegion: string = ROLE.REGION
+    regions: any[] = REGIONS
 
     constructor(
         private usersService: UsersService,

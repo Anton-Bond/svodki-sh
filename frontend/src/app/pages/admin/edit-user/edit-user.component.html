@@ -1,17 +1,4 @@
 <div [formGroup]="form">
-    <div class="p-col-12 p-md-8">
-        <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-            <input type="text" pInputText placeholder="Имя" formControlName="name">
-        </div>
-    </div>
-
-    <div class="p-col-12 p-md-8">
-        <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i class="pi pi-globe"></i></span>
-            <input type="text" pInputText placeholder="Электронная почта" formControlName="email">
-        </div>
-    </div>
 
     <div class="p-col-12 p-md-8">
         <div class="p-inputgroup">
@@ -23,6 +10,34 @@
                 optionLabel="name"
                 optionValue="type"
             ></p-dropdown>
+        </div>
+    </div>
+
+    <div *ngIf="form.value.role === someRegion" class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+            <p-dropdown
+                class="ui-in-add-new-u"
+                [options]="regions"
+                placeholder="Выберите район"
+                formControlName="name"
+                optionLabel="name"
+                optionValue="code"
+            ></p-dropdown>
+        </div>
+    </div>
+
+    <div *ngIf="form.value.role !== someRegion" class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+            <input type="text" pInputText placeholder="Имя" formControlName="name">
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-globe"></i></span>
+            <input type="text" pInputText placeholder="Электронная почта" formControlName="email">
         </div>
     </div>
 
@@ -38,6 +53,7 @@
 
 
     <button
+        *ngIf="!noeditable"
         pButton
         icon="pi pi-times"
         type="button"

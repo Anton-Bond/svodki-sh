@@ -9,6 +9,7 @@ import { Svtable } from '../../../shared/interfaces'
 import { REGIONS } from '../../../shared/constants'
 import { FormulaInputModalComponent } from '../../../components/formula-input-modal/formula-input-modal.component'
 import { UtilsService } from '../../../services/utils.service'
+import { SvtablesService } from '../../../services/svtables.service'
 
 @Component({
   selector: 'app-add-new-svtable',
@@ -18,7 +19,8 @@ import { UtilsService } from '../../../services/utils.service'
 })
 export class AddNewSvtableComponent implements OnInit {
     svtable: Svtable = {
-        svtableDate: moment().format('DD-MM-YYYY'),
+        svtableDate: moment().format('17-02-2021'),
+        // svtableDate: moment().format('DD-MM-YYYY'),
         name: '',
         cols: [],
         rows: []
@@ -32,7 +34,8 @@ export class AddNewSvtableComponent implements OnInit {
 
     constructor(
         private dialogService: DialogService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private svtablesService: SvtablesService
     ) {
         this.getScreenSize()
     }
@@ -123,7 +126,17 @@ export class AddNewSvtableComponent implements OnInit {
         });
     }
 
-
+    onSubmit() {
+        this.svtablesService.addNew(this.svtable).subscribe(svtable => {
+            if (svtable) {
+                alert('Новая таблица добавлена в базу')
+            } else {
+                alert('Что-то пошло не так! Новая таблица не была добавлена.')
+            }
+        },
+            (e) => alert(e.error.message)
+        )
+    }
 
 
 

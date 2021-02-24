@@ -2,6 +2,34 @@
 
     <div class="p-col-12 p-md-8">
         <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-star-o"></i></span>
+            <p-dropdown
+                class="ui-in-add-new-u"
+                [options]="roles"
+                placeholder="Выберите роль"
+                formControlName="role"
+                optionLabel="name"
+                optionValue="type"
+            ></p-dropdown>
+        </div>
+    </div>
+
+    <div *ngIf="form.value.role === someRegion" class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+            <p-dropdown
+                class="ui-in-add-new-u"
+                [options]="regions"
+                placeholder="Выберите район"
+                formControlName="name"
+                optionLabel="name"
+                optionValue="code"
+            ></p-dropdown>
+        </div>
+    </div>
+
+    <div *ngIf="form.value.role !== someRegion" class="p-col-12 p-md-8">
+        <div class="p-inputgroup">
             <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
             <input type="text" pInputText placeholder="Имя" formControlName="name">
         </div>
@@ -25,20 +53,6 @@
         <div class="p-inputgroup">
             <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
             <input type="password" pInputText placeholder="Повторите пароль" formControlName="repeatPassword">
-        </div>
-    </div>
-
-    <div class="p-col-12 p-md-8">
-        <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i class="pi pi-star-o"></i></span>
-            <p-dropdown
-                class="ui-in-add-new-u"
-                [options]="roles"
-                placeholder="Выберите роль"
-                formControlName="role"
-                optionLabel="name"
-                optionValue="type"
-            ></p-dropdown>
         </div>
     </div>
 
