@@ -12,9 +12,9 @@ export interface Message {
 }
 
 export interface Svtable {
-    svtableId: string
     svtableDate: string
     name: string
-    header: Object[]
-    data: Object[]
+    cols: any[]
+    rows: any[]
+    svtableId?: string
 }

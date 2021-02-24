@@ -99,7 +99,7 @@ module.exports.updatePassw = async (req, res) => {
 
 module.exports.removeById = async (req, res) => {
     try {
-        const user = await User.findOneAndRemove(req.params.userId);
+        const user = await User.findOneAndRemove({userId: req.params.userId});
         res.status(200).json(user);
     } catch (e) {
         res.status(404).send(e.message || 'Some error occurred while removing User.');

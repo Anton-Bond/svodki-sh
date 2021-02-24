@@ -16,6 +16,10 @@ export class SvtablesService {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     }
 
+    getOnCurrentDate(currentDate: string): Observable<Svtable[]> {
+        return this.http.get<Svtable[]>(`${DB.url}/api/sv-table/on-current-date/${currentDate}`)
+    }
+
     create(svtable: Svtable) {
         return this.http.post<Svtable>(
             `${DB.url}/api/sv-table/new`,
@@ -33,4 +37,9 @@ export class SvtablesService {
             //     data: JSON.parse(data.data.toString())
             // })))
     }
+
+    addNew(svtable: Svtable): Observable<Svtable> {
+        return this.http.post<Svtable>(`${DB.url}/api/sv-table/new`, svtable, this.httpOptions)
+    }
+
 }

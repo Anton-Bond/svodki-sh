@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core'
+import { MenuItem } from 'primeng/api'
+import * as moment from 'moment'
 
 import { Svtable } from '../../shared/interfaces'
 import { SvtablesService } from '../../services/svtables.service'
+import { REGIONS } from '../../shared/constants'
 
 @Component({
     selector: 'app-svod-table',
@@ -9,8 +12,12 @@ import { SvtablesService } from '../../services/svtables.service'
     styleUrls: ['./svod-table.component.scss']
 })
 export class SvodTableComponent implements OnInit {
-
+    // currentDate: string = moment().format('DD-MM-YYYY')
+    currentDate: string = moment().format('17-02-2021')
 // products: Object[] = [{}, ...]
+    svtables: Svtable[]
+    tabs: Object[]
+    activeTab: number = 0
 
     reg: Object[] = [
         { name: 'Брагинский', a: '45', b: '5', c: '26', e: '7', f: '83', g: '9', h: '10', k: '14', l: '12' },
@@ -39,13 +46,26 @@ export class SvodTableComponent implements OnInit {
     constructor(private svtablesService: SvtablesService) { }
 
     ngOnInit(): void {
-        this.fetchCurrentTable()
+        this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
+            this.svtables = svtables
+        })
     }
 
     fetchCurrentTable() {
-        this.svtablesService.getByDate('17-02-2021').subscribe((svtable: Svtable) => {
+        this.svtablesService.getByDate(this.currentDate).subscribe((svtable: Svtable) => {
             console.log(svtable)
         })
     }
 
+    toggleTab(idx: number) {
+        this.activeTab = idx
+    }
+
+    createNewTable() {
+        this.activeTab = -1
+    }
+
+    translateCode(code: string) {
+        return REGIONS.find(r => r.code === code).name
+    }
 }

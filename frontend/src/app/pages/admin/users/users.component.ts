@@ -5,7 +5,7 @@ import { DialogService } from 'primeng/dynamicdialog'
 import { UsersService } from '../../../services/users.service'
 import { User } from '../../../shared/interfaces'
 import { TRANSLATE } from '../../../shared/translate'
-import { ROLE } from '../../../shared/constants'
+import { ROLE, REGIONS } from '../../../shared/constants'
 import { EditPassUserComponent } from '../edit-pass-user/edit-pass-user.component'
 import { EditUserComponent } from '../edit-user/edit-user.component'
 import { AddNewUserComponent } from '../add-new-user/add-new-user.component'
@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
     scrollable: boolean = false
 
     constructor(
-        public dialogService: DialogService,
+        private dialogService: DialogService,
         private usersService: UsersService,
         private route: ActivatedRoute
     ) {}
@@ -39,8 +39,12 @@ export class UsersComponent implements OnInit {
         })
     }
 
+    getReadabilityRegName(code: string) {
+        const isRegion = REGIONS.find(r => r.code === code)
+        return isRegion ? isRegion.name : code
+    }
     getReadabilityRole(role: string) {
-        return TRANSLATE.ROLE[role];
+        return TRANSLATE.ROLE[role]
     }
 
     editUser(userId, name) {
@@ -65,7 +69,7 @@ export class UsersComponent implements OnInit {
             data: {
                 id: userId
             },
-            header: `Введите новый пароль для: ${name}`,
+            header: `Введите новый пароль для: ${this.getReadabilityRegName(name)}`,
             width: '40%'
         })
 

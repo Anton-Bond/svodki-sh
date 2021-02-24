@@ -32,6 +32,15 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { EditPassUserComponent } from './pages/admin/edit-pass-user/edit-pass-user.component';
 import { AddNewUserComponent } from './pages/admin/add-new-user/add-new-user.component';
 import { SvodTableComponent } from './pages/svod-table/svod-table.component';
+import { AddNewSvtableComponent } from './pages/svod-table/add-new-svtable/add-new-svtable.component';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { ToastModule } from 'primeng/toast';
+import { CalendarModule } from 'primeng/calendar';
+import { SliderModule } from 'primeng/slider';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { FormulaInputModalComponent } from './components/formula-input-modal/formula-input-modal.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +54,8 @@ import { SvodTableComponent } from './pages/svod-table/svod-table.component';
         EditPassUserComponent,
         AddNewUserComponent,
         SvodTableComponent,
+        AddNewSvtableComponent,
+        FormulaInputModalComponent,
     ],
     imports: [
         BrowserModule,
@@ -68,6 +79,13 @@ import { SvodTableComponent } from './pages/svod-table/svod-table.component';
         TabMenuModule,
         DropdownModule,
         DynamicDialogModule,
+        ContextMenuModule,
+        ToastModule,
+        CalendarModule,
+        SliderModule,
+        MultiSelectModule,
+        DialogModule,
+        ProgressBarModule,
 
         AppRoutingModule       // can be last
     ],

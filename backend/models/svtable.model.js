@@ -12,10 +12,10 @@ const svtableSchema = new Schema({
     name: {
         type: String
     },
-    header: {
+    cols: {
         type: String
     },
-    data: {
+    rows: {
         type: String
     }
 })
