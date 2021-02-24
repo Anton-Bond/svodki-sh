@@ -18,51 +18,57 @@
     <div class="card">
         <app-add-new-svtable *ngIf="activeTab === -1"></app-add-new-svtable>
 
-        <p-table *ngIf="activeTab >=0" [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm" [resizableColumns]="true" columnResizeMode="expand">
+        <p-table
+            *ngIf="activeTab >= 0"
+            id="ui-new-svtable"
+            [columns]="currentSvtable.cols"
+            [value]="currentSvtable.rows"
+            styleClass="p-datatable-gridlines p-datatable-sm"
+            [resizableColumns]="true"
+            columnResizeMode="expand"
+            [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-260)+'px'}}" frozenWidth="145px"
+        >
             <ng-template pTemplate="caption">
-                Информация об уборке кукурузы (зерновая группа)
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    {{currentSvtable.name}}
+                </div>
             </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Наименование районов</th>
-                    <th>Наличие кок-6(8)</th>
-                    <th>Работ агрег кок-4,2</th>
-                    <th>Выр. на 1 агрегат. Га</th>
-                    <th>Заплющ. зерна, тн</th>
-                    <th>в т. ч. за день</th>
-                    <th>Налич. плющ, шт </th>
-                    <th>в т.ч. в рукав</th>
-                    <th>Кол работ-х плющ.</th>
-                    <th>Выр. на плющ, тн</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-reg>
-                <tr>
-                    <td style="font-weight: 600;">{{reg.name}}</td>
-                    <td>{{reg.a}}</td>
-                    <td>{{reg.b}}</td>
-                    <td>{{reg.c}}</td>
-                    <td>{{reg.e}}</td>
-                    <td>{{reg.f}}</td>
-                    <td>{{reg.g}}</td>
-                    <td>{{reg.h}}</td>
-                    <td>{{reg.k}}</td>
-                    <td>{{reg.l}}</td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="summary">
 
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" style="width:145px">
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th pResizableColumn *ngFor="let col of columns">
+                        {{col.header || '(пусто)'}}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+                        {{getCellValue(col, rowData.data)}}
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="footer" let-columns>
+                <tr>
+                    <td *ngFor="let col of columns">
+                        {{getColTotal(col)}}
+                    </td>
+                </tr>
             </ng-template>
         </p-table>
+
     </div>
 </div>
 
-
-
-
-
-
-<!-- <p-table [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm">
+<!-- <p-table *ngIf="activeTab >=0" [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm" [resizableColumns]="true" columnResizeMode="expand">
     <ng-template pTemplate="caption">
         Информация об уборке кукурузы (зерновая группа)
     </ng-template>
@@ -97,4 +103,4 @@
     <ng-template pTemplate="summary">
 
     </ng-template>
-  </p-table> -->
+</p-table> -->

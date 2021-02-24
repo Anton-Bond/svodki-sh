@@ -49,8 +49,6 @@ module.exports.findByDate = async (req, res) => {
 module.exports.allOnCurrentDate = async (req, res) => {
     try {
         const svtables = await Svtable.find({ svtableDate: req.params.currentDate })
-
-            console.log('svtables >>', svtables)
         if (svtables) {
             const result = svtables.map(t => ({
                 svtableId: t.svtableId,

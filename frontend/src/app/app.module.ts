@@ -41,6 +41,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { FormulaInputModalComponent } from './components/formula-input-modal/formula-input-modal.component';
+import { EditSvtableComponent } from './pages/svod-table/edit-svtable/edit-svtable.component';
 
 @NgModule({
     declarations: [
@@ -56,6 +57,7 @@ import { FormulaInputModalComponent } from './components/formula-input-modal/for
         SvodTableComponent,
         AddNewSvtableComponent,
         FormulaInputModalComponent,
+        EditSvtableComponent,
     ],
     imports: [
         BrowserModule,
