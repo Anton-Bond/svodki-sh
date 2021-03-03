@@ -1,0 +1,83 @@
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<p-table
+    id="ui-new-svtable"
+    [columns]="svtable.cols"
+    [value]="svtable.rows"
+    styleClass="p-datatable-gridlines p-datatable-sm"
+    [resizableColumns]="true"
+    columnResizeMode="expand"
+    [(contextMenuSelection)]="selectedCol" [contextMenu]="cm" dataKey="code"
+    [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-300)+'px'}}" frozenWidth="145px"
+>
+    <ng-template pTemplate="caption">
+        <span class="p-float-label" [style]="{width: '50%'}">
+            <input id="uiloat-input" type="text" pInputText [(ngModel)]="svtable.name" [style]="{width: '100%'}" />
+            <label for="uiloat-input">Название таблицы</label>
+        </span>
+
+        <div class="ui-tadd-btngroup">
+            <button pButton icon="pi pi-times" type="button" label="Удалить" class="p-button-danger" [style]="{'margin-right': '4rem'}" (click)="removeOne()"></button>
+            <button pButton icon="pi pi-save" type="button" label="Сохранить" (click)="onSubmit()"></button>
+            <button pButton icon="pi pi-times" type="button" label="Отмена" class="p-button-secondary" (click)="cancelChanges()"></button>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" style="width:145px">
+        </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th pResizableColumn *ngFor="let col of columns">
+                <input *ngIf="col.type !== 'name'" type="text" pInputText [(ngModel)]="col.header" class="ui-add-t-input-header" />
+                <p *ngIf="col.type === 'name'" class="ui-add-t-name-header">{{col.header}}</p>
+            </th>
+        </tr>
+        <tr>
+            <th
+                [pContextMenuRow]="col.idx"
+                pResizableColumn
+                class="ui-col-idx"
+                *ngFor="let col of columns"
+            >
+                <p [ngStyle]="{'background-color': col.type === 'formula' ? '#ffdede' : 'inherit'}">
+                    {{utilsService.numberToLetter(col.idx)}}
+                </p>
+            </th>
+        </tr>
+    </ng-template>
+
+    <!-- SHOW WITH ALL REGIONS -->
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                <span *ngIf="col.type === 'formula'">
+                    <label class="ui-add-t-name-body">f = </label>
+                    <input
+                        pInputText
+                        [disabled]="true"
+                        type="text" pInputText
+                        [(ngModel)]="rowData.data[col.idx]"
+                        class="p-inputtext-sm"
+                        [ngStyle]="{'width': '70%'}"
+                    />
+                    <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.idx, rowData.data[col.idx])"></i>
+                </span>
+                <input
+                    *ngIf="col.type === 'value'"
+                    type="text" pInputText
+                    [(ngModel)]="rowData.data[col.idx]"
+                    class="ui-add-t-input-data p-inputtext-sm"
+                />
+                <p *ngIf="col.type === 'name'" class="ui-add-t-name-body">{{rowData.data[col.idx]}}</p>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+
+    </ng-template>
+</p-table>

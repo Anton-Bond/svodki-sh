@@ -42,4 +42,11 @@ export class SvtablesService {
         return this.http.post<Svtable>(`${DB.url}/api/sv-table/new`, svtable, this.httpOptions)
     }
 
+    updateOne(svtable: Svtable): Observable<Svtable> {
+        return this.http.put<Svtable>(`${DB.url}/api/sv-table/${svtable.svtableId}`, svtable, this.httpOptions)
+    }
+
+    removeOne(svtableId: string): Observable<Svtable> {
+        return this.http.delete<Svtable>(`${DB.url}/api/sv-table/${svtableId}`)
+    }
 }

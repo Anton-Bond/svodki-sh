@@ -49,8 +49,6 @@ module.exports.findByDate = async (req, res) => {
 module.exports.allOnCurrentDate = async (req, res) => {
     try {
         const svtables = await Svtable.find({ svtableDate: req.params.currentDate })
-
-            console.log('svtables >>', svtables)
         if (svtables) {
             const result = svtables.map(t => ({
                 svtableId: t.svtableId,
@@ -67,6 +65,40 @@ module.exports.allOnCurrentDate = async (req, res) => {
         res.status(404).send(e.message || 'Some error occurred while receiving svod table.')
     }
 };
+
+module.exports.uptateOne = async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: 'Content can not be empty!',
+        })
+    }
+
+    try {
+        const svtable = await Svtable.findOneAndUpdate(
+            { svtableId: req.params.svtableId },
+            {
+                name: req.body.name,
+                cols: req.body?.cols ? JSON.stringify(req.body.cols) : '',
+                rows: req.body?.rows ? JSON.stringify(req.body.rows) : ''
+            },
+            { upsert: true }
+        );
+        res.status(201).json(svtable);
+    } catch (e) {
+        res.status(404).send(e.message || 'Some error occurred while updating Svtable.');
+    }
+};
+
+module.exports.removeOne = async (req, res) => {
+    try {
+        const svtable = await Svtable.findOneAndRemove({ svtableId: req.params.svtableId });
+        res.status(200).json(svtable);
+    } catch (e) {
+        res.status(404).send(e.message || 'Some error occurred while removing User.');
+    }
+};
+
+
 
 
 //   by CurrentDate

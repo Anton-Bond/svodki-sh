@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { HostListener } from "@angular/core"
 import * as moment from 'moment'
-import { sortBy, zip } from 'lodash'
+import { sortBy } from 'lodash'
 import { MenuItem } from 'primeng/api'
 import { DialogService } from 'primeng/dynamicdialog'
 
@@ -12,19 +12,22 @@ import { UtilsService } from '../../../services/utils.service'
 import { SvtablesService } from '../../../services/svtables.service'
 
 @Component({
-  selector: 'app-add-new-svtable',
-  templateUrl: './add-new-svtable.component.html',
-  styleUrls: ['./add-new-svtable.component.scss'],
+  selector: 'app-edit-svtable',
+  templateUrl: './edit-svtable.component.html',
+  styleUrls: ['./edit-svtable.component.scss'],
   providers: [DialogService]
 })
-export class AddNewSvtableComponent implements OnInit {
-    svtable: Svtable = {
+export class EditSvtableComponent implements OnInit {
+    @Input() editedSvtable: Svtable
+    editMode: boolean = false
+    emptySvtable: Svtable = {
         svtableDate: moment().format('17-02-2021'),
         // svtableDate: moment().format('DD-MM-YYYY'),
         name: '',
         cols: [],
         rows: []
     }
+    svtable: Svtable
     selectedCol: number = 0
     items: MenuItem[]
     frozenCols: any[] = [{ idx: 0, header: 'Районы', type: 'name'  }]
@@ -46,13 +49,24 @@ export class AddNewSvtableComponent implements OnInit {
         this.screenWidth = window.innerWidth
     }
 
+    @Output() onCancel = new EventEmitter()
+    @Output() onUpdate = new EventEmitter<Svtable>()
+    @Output() onAddNew = new EventEmitter<Svtable>()
+    @Output() onRemove = new EventEmitter<string>()
+
     ngOnInit(): void {
-        REGIONS.forEach(reg => {
-            this.svtable.rows.push({region: reg.code, data: [reg.name, '']})
-        })
-        this.svtable.cols = [
-            { idx: 1, header: '', type: 'value'  }
-        ]
+        if (this.editedSvtable) {
+            this.editMode = true
+            this.svtable = this.editedSvtable
+        } else {
+            REGIONS.forEach(reg => {
+                this.emptySvtable.rows.push({region: reg.code, data: [reg.name, '']})
+            })
+            this.emptySvtable.cols = [
+                { idx: 1, header: '', type: 'value'  }
+            ]
+            this.svtable = this.emptySvtable
+        }
 
         this.items = [
             {label: 'Добавть колонку', icon: 'pi pi-plus-circle', command: () => this.addColumn(this.selectedCol)},
@@ -127,22 +141,48 @@ export class AddNewSvtableComponent implements OnInit {
     }
 
     onSubmit() {
-        this.svtablesService.addNew(this.svtable).subscribe(svtable => {
-            if (svtable) {
-                alert('Новая таблица добавлена в базу')
-            } else {
-                alert('Что-то пошло не так! Новая таблица не была добавлена.')
-            }
-        },
-            (e) => alert(e.error.message)
-        )
+        if (this.editMode) {
+            this.svtablesService.updateOne(this.svtable).subscribe(svtable => {
+                if (svtable) {
+                    this.onUpdate.emit(svtable)
+                    alert('Таблица была изменена')
+                } else {
+                    alert('Что-то пошло не так! Таблица не была изменена.')
+                }
+            },
+                (e) => alert(e.error.message)
+            )
+        } else {
+            this.svtablesService.addNew(this.svtable).subscribe(svtable => {
+                if (svtable) {
+                    this.onAddNew.emit(svtable)
+                    alert('Новая таблица добавлена в базу')
+                } else {
+                    alert('Что-то пошло не так! Новая таблица не была добавлена.')
+                }
+            },
+                (e) => alert(e.error.message)
+            )
+        }
     }
 
+    cancelChanges() {
+        this.onCancel.emit()
+    }
 
-
-    // addColumnToTheEnd() {
-    //     const nextIdx = this.svtable.cols.reduce((res, curr) => curr.idx > res ? curr.idx : res, 1) + 1
-    //     this.svtable.cols.push({ idx: nextIdx, header: '', type: 'value' })
-    //     this.svtable.rows.forEach(r => r.data.push(''))
-    // }
+    removeOne() {
+        const isDelete = confirm('Вы действительно хотите удалить таблицу безвозвратно?')
+        if (isDelete) {
+                this.svtablesService.removeOne(this.svtable.svtableId).subscribe(svtable => {
+                if (svtable) {
+                    this.onRemove.emit(svtable.svtableId)
+                    alert(`Таблица была удалена!`)
+                } else {
+                    alert('Что-то пошло не так! Таблица не была удалена.')
+                }
+            },
+                (e) => alert(e.error.message)
+            )
+        }
+    }
 }
