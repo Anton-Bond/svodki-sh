@@ -48,4 +48,9 @@ export class AuthService {
         return this.getDecodedAccessToken(sessionStorage.getItem('auth-token')).role === ROLE.ADMIN
     }
 
+    isEditable(): boolean {
+        return this.getDecodedAccessToken(sessionStorage.getItem('auth-token')).role === ROLE.ADMIN
+            || this.getDecodedAccessToken(sessionStorage.getItem('auth-token')).role === ROLE.DISP
+    }
+
 }

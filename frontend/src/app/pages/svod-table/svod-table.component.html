@@ -9,6 +9,7 @@
                 (click)="toggleTab(i)"
             >{{tab.name ? tab.name : 'Без названия'}}</li>
             <li
+                *ngIf="ableEdit"
                 [ngStyle]="{'color': activeTab === -1 ? '#015fc2f0' : 'inherit'}"
                 (click)="createNewTable()"
             ><i class="pi pi-plus"></i></li>
@@ -16,11 +17,18 @@
     </div>
 
     <div class="card">
-        <app-add-new-svtable *ngIf="activeTab === -1"></app-add-new-svtable>
+        <app-edit-svtable
+            *ngIf="editMode || addNewMode"
+            [editedSvtable]="editMode ? currentSvtable : null"
+            (onCancel)="onCancel($event)"
+            (onUpdate)="onUpdate($event)"
+            (onAddNew)="onAddNew($event)"
+            (onRemove)="onRemove($event)"
+        ></app-edit-svtable>
 
         <p-table
-            *ngIf="activeTab >= 0"
-            id="ui-new-svtable"
+            *ngIf="viewMode"
+            id="ui-view-svtable"
             [columns]="currentSvtable.cols"
             [value]="currentSvtable.rows"
             styleClass="p-datatable-gridlines p-datatable-sm"
@@ -30,7 +38,16 @@
         >
             <ng-template pTemplate="caption">
                 <div class="p-d-flex p-ai-center p-jc-between">
-                    {{currentSvtable.name}}
+                    <div>
+                        <p class="ui-nopadding">{{currentSvtable.name}}</p>
+                    </div>
+                    <button
+                        *ngIf="ableEdit"
+                        pButton type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-rounded"
+                        (click)="toggleEditable()"
+                    ></button>
                 </div>
             </ng-template>
 
@@ -67,40 +84,3 @@
 
     </div>
 </div>
-
-<!-- <p-table *ngIf="activeTab >=0" [value]="reg" styleClass="p-datatable-gridlines p-datatable-sm" [resizableColumns]="true" columnResizeMode="expand">
-    <ng-template pTemplate="caption">
-        Информация об уборке кукурузы (зерновая группа)
-    </ng-template>
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Наименование районов</th>
-            <th>Наличие кок-6(8)</th>
-            <th>Работ агрег кок-4,2</th>
-            <th>Выр. на 1 агрегат. Га</th>
-            <th>Заплющ. зерна, тн</th>
-            <th>в т. ч. за день</th>
-            <th>Налич. плющ, шт </th>
-            <th>в т.ч. в рукав</th>
-            <th>Кол работ-х плющ.</th>
-            <th>Выр. на плющ, тн</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-reg>
-        <tr>
-            <td style="font-weight: 600;">{{reg.name}}</td>
-            <td>{{reg.a}}</td>
-            <td>{{reg.b}}</td>
-            <td>{{reg.c}}</td>
-            <td>{{reg.e}}</td>
-            <td>{{reg.f}}</td>
-            <td>{{reg.g}}</td>
-            <td>{{reg.h}}</td>
-            <td>{{reg.k}}</td>
-            <td>{{reg.l}}</td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-
-    </ng-template>
-</p-table> -->

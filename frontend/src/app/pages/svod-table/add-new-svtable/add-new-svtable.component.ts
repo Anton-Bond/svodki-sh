@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { HostListener } from "@angular/core"
 import * as moment from 'moment'
-import { sortBy, zip } from "lodash"
+import { sortBy, zip } from 'lodash'
 import { MenuItem } from 'primeng/api'
 import { DialogService } from 'primeng/dynamicdialog'
 
