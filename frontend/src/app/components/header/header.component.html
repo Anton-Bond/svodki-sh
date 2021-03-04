@@ -1,10 +1,7 @@
-<!-- <p-tabMenu [model]="items" [activeItem]="activeItem" class="ui-header-adm"></p-tabMenu> -->
-<!-- <p-menubar [model]="items"></p-menubar> -->
-
 <header class="ui-header p-d-flex p-ai-center">
 
     <div class="p-mr-2 ui-header-item logo">
-        <p>Сводки с/х</p>
+        Сводки с/х
     </div>
 
     <div
@@ -25,17 +22,16 @@
     </div>
 
     <div class="p-mr-2 ui-header-item p-ml-auto">
-        <p>{{currentDate}}</p>
+        {{currentDate}}
     </div>
+    <p-calendar id="ui-calendar" [(ngModel)]="calenDate" [showIcon]="true" inputId="ui-input-calendar" (click)="setCurrentDate()"></p-calendar>
 
     <div class="p-mr-2 ui-header-item ui-u-name p-ml-auto">
-        <p>{{currentUserName}}</p>
+        {{currentUserName}}
     </div>
 
     <div class="p-mr-2 ui-header-item ui-men-btn" (click)="onLogout()">
-
-        <p>Выйти <i class="pi pi-sign-out"></i></p>
+        <i class="pi pi-sign-out ui-icon-header"></i>
     </div>
 
 </header>
-

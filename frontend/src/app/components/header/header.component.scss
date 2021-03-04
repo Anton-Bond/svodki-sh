@@ -3,14 +3,25 @@
         margin-right: 0 !important;
     }
     .pi.ui-icon-header {
-        font-size: 1.6rem;
+        font-size: 1.2rem;
         padding: .8rem;
+    }
+
+    #ui-calendar>span>button{
+        margin-left: 1rem;
+        border-radius: .3rem;
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    #ui-input-calendar {
+        display: none;
     }
 }
 
 .ui-header {
     width: 100%;
-    background-color: #1a531a;
+    background-color: #226422;
     color: #ffffff;
 }
 
@@ -19,7 +30,6 @@
 }
 
 .logo {
-    background-color: #444;
     font-size: large;
     font-weight: 600;
     padding: 0 2.5rem;
@@ -27,13 +37,11 @@
 
 .ui-men-btn {
     cursor: pointer;
-    padding: .2rem 1rem;
-    // color: #55b2ff;
+    padding: 0 1rem;
     background-color: #244a6e;
 }
 
 .ui-men-btn:hover {
-    // background-color: #517551;
     background-color: #518cbe;
     color: #000000
 }

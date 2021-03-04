@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core'
 import { HostListener } from "@angular/core"
-import { MenuItem } from 'primeng/api'
-import * as moment from 'moment'
 import * as _ from 'lodash'
 
 import { Svtable } from '../../shared/interfaces'
 import { SvtablesService } from '../../services/svtables.service'
 import { REGIONS } from '../../shared/constants'
-import { UtilsService } from 'src/app/services/utils.service'
-import { AuthService } from 'src/app/services/auth.service'
+import { UtilsService } from '../../services/utils.service'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
     selector: 'app-svod-table',
@@ -22,8 +20,7 @@ export class SvodTableComponent implements OnInit {
     addNewMode: boolean = false
     screenHeight: number
     screenWidth: number
-    // currentDate: string = moment().format('DD-MM-YYYY')
-    currentDate: string = moment().format('17-02-2021')
+    currentDate: string = ''
     svtables: Svtable[]
     currentSvtable: Svtable
     tabs: any[]
@@ -31,6 +28,7 @@ export class SvodTableComponent implements OnInit {
     frozenCols: any[] = [{ idx: 0, header: 'Районы', type: 'name' }]
 
     constructor(
+        private utilsService: UtilsService,
         private authService: AuthService,
         private svtablesService: SvtablesService,
         private utilsServive: UtilsService
@@ -45,9 +43,19 @@ export class SvodTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.utilsServive.dateUpdated.subscribe(
+            () => {
+                this.initData()
+            }
+          );
+          this.initData()
+    }
+
+    initData() {
+        this.currentDate = this.utilsService.getCurrentDate()
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
-            this.currentSvtable = svtables[0]
+            this.currentSvtable = svtables.length > 0 ? svtables[0] : null
         })
         // TO DO: get value from server
         this.ableEdit = this.authService.isEditable()
@@ -116,7 +124,7 @@ export class SvodTableComponent implements OnInit {
             })
             try {
                 // return eval(cod)
-                return eval(cod) ? _.ceil(_.toNumber(eval(cod)), 2) : '0'
+                return eval(cod) ? _.round(_.toNumber(eval(cod)), 2) : '0'
             } catch {
                 return '?ошибка формулы'
             }
@@ -137,7 +145,7 @@ export class SvodTableComponent implements OnInit {
                 return sum + 0
             }, 0)
 
-            return total ? total : '0' // +ceil
+            return total ? _.round(total, 2) : '0'
         }
     }
 }

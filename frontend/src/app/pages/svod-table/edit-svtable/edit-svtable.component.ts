@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { HostListener } from "@angular/core"
 import * as moment from 'moment'
-import { sortBy } from 'lodash'
+import { sortBy, times } from 'lodash'
 import { MenuItem } from 'primeng/api'
 import { DialogService } from 'primeng/dynamicdialog'
 
@@ -20,9 +20,9 @@ import { SvtablesService } from '../../../services/svtables.service'
 export class EditSvtableComponent implements OnInit {
     @Input() editedSvtable: Svtable
     editMode: boolean = false
+    initialRows: any[] = []
     emptySvtable: Svtable = {
-        svtableDate: moment().format('17-02-2021'),
-        // svtableDate: moment().format('DD-MM-YYYY'),
+        svtableDate: '',
         name: '',
         cols: [],
         rows: []
@@ -60,8 +60,11 @@ export class EditSvtableComponent implements OnInit {
             this.svtable = this.editedSvtable
         } else {
             REGIONS.forEach(reg => {
-                this.emptySvtable.rows.push({region: reg.code, data: [reg.name, '']})
+                this.initialRows.push({region: reg.code, data: [reg.name, '']})
             })
+
+            this.emptySvtable.svtableDate = this.utilsService.getCurrentDate()
+            this.emptySvtable.rows = this.initialRows
             this.emptySvtable.cols = [
                 { idx: 1, header: '', type: 'value'  }
             ]
