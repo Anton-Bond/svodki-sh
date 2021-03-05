@@ -7,7 +7,7 @@
                 class="active-tab"
                 [ngStyle]="{'color': activeTab === i ? '#015fc2f0' : 'inherit', 'border-bottom':  activeTab === i ? '2px solid #015fc2f0' : '2px solid #c9c9c9'}"
                 (click)="toggleTab(i)"
-            >{{tab.name ? tab.name : 'Без названия'}}</li>
+            >{{tab.name ? (tab.name  | slice:0:15) + '...' : 'Без названия' }}</li>
             <li
                 *ngIf="ableEdit"
                 [ngStyle]="{'color': activeTab === -1 ? '#015fc2f0' : 'inherit'}"

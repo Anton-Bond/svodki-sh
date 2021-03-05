@@ -1,11 +1,31 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
+import { EventEmitter } from '@angular/core'
+import * as moment from 'moment'
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
+    dateUpdated = new EventEmitter()
+
+    private currentDate: string = moment().format('DD-MM-YYYY')
+    // currentDate: string = moment().locale('ru').format('LL')
+    // currentDate: string = moment().format('DD-MM-YYYY')
 
     constructor() { }
+
+    getCurrentDate() {
+        return this.currentDate
+    }
+
+    getHumCurrentDate() {
+        return moment(this.currentDate, 'DD-MM-YYYY').locale('ru').format('LL')
+    }
+
+    setCurrentDate(date: Date) {
+        this.currentDate = moment(date).format('DD-MM-YYYY')
+        this.dateUpdated.emit(this.currentDate)
+    }
 
     numberToLetter(num: number): string {
         if (num === 0) {

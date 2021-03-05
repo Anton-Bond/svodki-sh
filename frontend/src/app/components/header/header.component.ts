@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { MenuItem } from 'primeng/api'
 import { Router } from '@angular/router'
 import * as moment from 'moment'
 
+import { UtilsService } from '../../services/utils.service'
 import { AuthService } from '../../services/auth.service'
 import { ROLE } from '../../shared/constants'
 
@@ -12,19 +12,24 @@ import { ROLE } from '../../shared/constants'
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-    currentDate: string = ''
+    currentDate: string
     currentUserName: string = ''
     isAdmin: boolean = false
-    // items: MenuItem[]
-    // activeItem: MenuItem
+    calenDate: Date
 
     constructor(
+        private utilsServive: UtilsService,
         private authService: AuthService,
         private router: Router
     ) {}
 
     ngOnInit() {
-        this.currentDate = moment().locale('ru').format('LL')
+        this.utilsServive.dateUpdated.subscribe(
+            () => {
+              this.currentDate = this.utilsServive.getHumCurrentDate()
+            }
+          );
+        this.currentDate = this.utilsServive.getHumCurrentDate()
         this.currentUserName = this.authService.getCurrentUser().name
         this.isAdmin = this.authService.getCurrentUser().role === ROLE.ADMIN
     }
@@ -34,24 +39,10 @@ export class HeaderComponent implements OnInit {
         this.authService.logout()
     }
 
-    // ngOnInit() {
-    //     this.currentDate = moment().lang('ru').format('LL')
-    //     this.items = [
-    //         {label: 'Главная', icon: 'pi pi-fw pi-home', routerLink: ['/svod-table']},
-    //         {label: 'Пользователи', icon: 'pi pi-fw pi-users', routerLink: ['/sv-admin', 'users']},
-    //         {label: 'Настройки', icon: 'pi pi-fw pi-cog', routerLink: ['/sv-admin', 'settings']},
-    //         {
-    //             label: 'Выход',
-    //             icon: 'pi pi-fw pi-sign-out',
-    //             command: e => {
-    //                 this.router.navigate([`/`])
-    //                 this.authService.logout()
-    //             }
-    //         }
-    //     ]
-    //     this.activeItem = this.items[1];
-    // }
-
-
-
+    setCurrentDate() {
+        if (this.calenDate && moment(this.calenDate).format('DD-MM-YYYY') !== this.utilsServive.getCurrentDate()) {
+            console.log('click')
+            this.utilsServive.setCurrentDate(this.calenDate)
+        }
+    }
 }
