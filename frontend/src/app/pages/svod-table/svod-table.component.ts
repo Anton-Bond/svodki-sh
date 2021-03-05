@@ -14,10 +14,11 @@ import { AuthService } from '../../services/auth.service'
     styleUrls: ['./svod-table.component.scss']
 })
 export class SvodTableComponent implements OnInit {
+    editMode: boolean = false
     ableEdit: boolean = false
     viewMode: boolean = true
-    editMode: boolean = false
     addNewMode: boolean = false
+    blockContent: boolean
     screenHeight: number
     screenWidth: number
     currentDate: string = ''
@@ -47,8 +48,14 @@ export class SvodTableComponent implements OnInit {
             () => {
                 this.initData()
             }
-          );
-          this.initData()
+        )
+        this.utilsServive.blockContentUpdated.subscribe(
+            () => {
+                this.blockContent = this.utilsService.getBlockContent()
+            }
+        )
+        this.blockContent = this.utilsService.getBlockContent()
+        this.initData()
     }
 
     initData() {
@@ -62,6 +69,7 @@ export class SvodTableComponent implements OnInit {
     }
 
     toggleEditable() {
+        this.utilsService.setBlockContent(true)
         this.editMode = this.ableEdit
         this.viewMode = false
     }
@@ -74,12 +82,14 @@ export class SvodTableComponent implements OnInit {
     }
 
     createNewTable() {
+        this.utilsService.setBlockContent(true)
         this.activeTab = -1
         this.addNewMode = true
         this.viewMode = false
     }
 
     onCancel() {
+        this.utilsService.setBlockContent(false)
         if (this.addNewMode) {this.activeTab = 0}
         this.viewMode = true
         this.editMode = false
@@ -87,6 +97,7 @@ export class SvodTableComponent implements OnInit {
     }
 
     onUpdate(table: Svtable) {
+        this.utilsService.setBlockContent(false)
         this.svtables[this.activeTab] = table
         this.viewMode = true
         this.editMode = false
@@ -94,6 +105,7 @@ export class SvodTableComponent implements OnInit {
     }
 
     onAddNew(table: Svtable) {
+        this.utilsService.setBlockContent(false)
         const newTab = this.svtables.length
         this.svtables.push(table)
         this.activeTab = newTab
@@ -103,6 +115,7 @@ export class SvodTableComponent implements OnInit {
     }
 
     onRemove(id: string) {
+        this.utilsService.setBlockContent(false)
         const temp = [...this.svtables]
         this.activeTab = 0
         this.svtables = temp.filter(t => t.svtableId !== id)

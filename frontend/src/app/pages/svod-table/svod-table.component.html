@@ -27,7 +27,7 @@
         ></app-edit-svtable>
 
         <p-table
-            *ngIf="viewMode"
+            *ngIf="viewMode && currentSvtable"
             id="ui-view-svtable"
             [columns]="currentSvtable.cols"
             [value]="currentSvtable.rows"
@@ -82,5 +82,8 @@
             </ng-template>
         </p-table>
 
+        <div *ngIf="!currentSvtable">
+            <p>Нет сводных таблиц на текущую дату</p>
+        </div>
     </div>
 </div>

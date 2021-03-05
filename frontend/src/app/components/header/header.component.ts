@@ -12,24 +12,31 @@ import { ROLE } from '../../shared/constants'
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+    blockContent: boolean
     currentDate: string
     currentUserName: string = ''
     isAdmin: boolean = false
     calenDate: Date
 
     constructor(
-        private utilsServive: UtilsService,
+        private utilsService: UtilsService,
         private authService: AuthService,
         private router: Router
     ) {}
 
     ngOnInit() {
-        this.utilsServive.dateUpdated.subscribe(
+        this.utilsService.blockContentUpdated.subscribe(
             () => {
-              this.currentDate = this.utilsServive.getHumCurrentDate()
+                this.blockContent = this.utilsService.getBlockContent()
             }
-          );
-        this.currentDate = this.utilsServive.getHumCurrentDate()
+        )
+        this.utilsService.dateUpdated.subscribe(
+            () => {
+              this.currentDate = this.utilsService.getHumCurrentDate()
+            }
+        )
+        this.blockContent = this.utilsService.getBlockContent()
+        this.currentDate = this.utilsService.getHumCurrentDate()
         this.currentUserName = this.authService.getCurrentUser().name
         this.isAdmin = this.authService.getCurrentUser().role === ROLE.ADMIN
     }
@@ -40,9 +47,9 @@ export class HeaderComponent implements OnInit {
     }
 
     setCurrentDate() {
-        if (this.calenDate && moment(this.calenDate).format('DD-MM-YYYY') !== this.utilsServive.getCurrentDate()) {
+        if (this.calenDate && moment(this.calenDate).format('DD-MM-YYYY') !== this.utilsService.getCurrentDate()) {
             console.log('click')
-            this.utilsServive.setCurrentDate(this.calenDate)
+            this.utilsService.setCurrentDate(this.calenDate)
         }
     }
 }

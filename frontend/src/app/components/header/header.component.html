@@ -7,6 +7,7 @@
     <div
         class="p-mr-2 ui-header-item ui-men-btn"
         routerLinkActive="active"
+        [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}"
         [routerLink]="['/svod-table']"
     >
         <i class="pi pi-chart-bar ui-icon-header"></i>
@@ -16,6 +17,7 @@
         *ngIf="isAdmin"
         class="p-mr-2 ui-header-item ui-men-btn"
         routerLinkActive="active"
+        [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}"
         [routerLink]="['/sv-admin', 'users']"
     >
         <i class="pi pi-users ui-icon-header"></i>
@@ -24,13 +26,20 @@
     <div class="p-mr-2 ui-header-item p-ml-auto">
         {{currentDate}}
     </div>
-    <p-calendar id="ui-calendar" [(ngModel)]="calenDate" [showIcon]="true" inputId="ui-input-calendar" (click)="setCurrentDate()"></p-calendar>
+    <p-calendar
+        id="ui-calendar"
+        [(ngModel)]="calenDate"
+        [showIcon]="true"
+        inputId="ui-input-calendar"
+        [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}"
+        (click)="setCurrentDate()"
+    ></p-calendar>
 
     <div class="p-mr-2 ui-header-item ui-u-name p-ml-auto">
         {{currentUserName}}
     </div>
 
-    <div class="p-mr-2 ui-header-item ui-men-btn" (click)="onLogout()">
+    <div class="p-mr-2 ui-header-item ui-men-btn" [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}" (click)="onLogout()">
         <i class="pi pi-sign-out ui-icon-header"></i>
     </div>
 
