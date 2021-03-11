@@ -7,7 +7,9 @@
                 class="active-tab"
                 [ngStyle]="{'color': activeTab === i ? '#015fc2f0' : 'inherit', 'border-bottom':  activeTab === i ? '2px solid #015fc2f0' : '2px solid #c9c9c9'}"
                 (click)="toggleTab(i)"
-            >{{tab.name ? (tab.name  | slice:0:15) + '...' : 'Без названия' }}</li>
+            >
+                {{tab.name ? (tab.name  | slice:0:15) + '...' : 'Без названия' }}
+            </li>
             <li
                 *ngIf="ableEdit"
                 [ngStyle]="{'color': activeTab === -1 ? '#015fc2f0' : 'inherit'}"
@@ -84,6 +86,22 @@
 
         <div *ngIf="!currentSvtable">
             <p>Нет сводных таблиц на текущую дату</p>
+            <div class="p-field p-col-12 p-md-4" *ngIf="ableEdit">
+                <label for="ui-input-todate">Копировать исходные таблицы даты: </label>
+                <p-calendar [(ngModel)]="fromDate" inputId="ui-input-todate" dateFormat="dd.mm.yy"></p-calendar>
+                <button
+                    pButton
+                    [disabled]="!fromDate"
+                    icon="pi pi-copy"
+                    class="p-button-rounded"
+                    type="button"
+                    [ngStyle]="{'margin-left': '1rem'}"
+                    (click)="onCopyFromDate()"
+                ></button>
+            </div>
         </div>
     </div>
 </div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast></p-toast>

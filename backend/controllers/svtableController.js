@@ -26,6 +26,38 @@ module.exports.create = async function (req, res) {
     }
 };
 
+module.exports.addNewSvatebles = async function (req, res) {
+    if (!req.body) {
+        res.status(400).send({
+            message: 'Content can not be empty!',
+        })
+    }
+
+    const svtables = req.body
+
+    const svtable = new Svtable({
+        svtableId: uuidv4(),
+        svtableDate: req.body.svtableDate,
+        name: req.body.name,
+        cols: req.body?.cols ? JSON.stringify(req.body.cols) : '',
+        rows: req.body?.rows ? JSON.stringify(req.body.rows) : ''
+    });
+
+    try {
+        const svtables = req.body.map(table => new Svtable({
+            svtableId: uuidv4(),
+            svtableDate: table.svtableDate,
+            name: table.name,
+            cols: JSON.stringify(table.cols),
+            rows: JSON.stringify(table.rows)
+        }))
+        await Svtable.create(svtables)
+        res.status(201).send({success: 'true'})
+    } catch (e) {
+        res.status(404).send(e.message || 'Some error occurred while creating svod tables.')
+    }
+};
+
 module.exports.findByDate = async (req, res) => {
     try {
         const svtable = await Svtable.findOne({ svtableDate: req.params.svtableDate })

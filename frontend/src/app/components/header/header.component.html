@@ -32,7 +32,7 @@
         [showIcon]="true"
         inputId="ui-input-calendar"
         [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}"
-        (click)="setCurrentDate()"
+        (onSelect)="setCurrentDate()"
     ></p-calendar>
 
     <div class="p-mr-2 ui-header-item ui-u-name p-ml-auto">

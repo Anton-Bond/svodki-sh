@@ -6,6 +6,8 @@ router.get('/on-current-date/:currentDate', controller.allOnCurrentDate)
 
 router.post('/new', controller.create)
 
+router.post('/addNewSvatebles', controller.addNewSvatebles)
+
 router.get('/:svtableDate', controller.findByDate)
 
 router.put('/:svtableId', controller.uptateOne)

@@ -47,9 +47,6 @@ export class HeaderComponent implements OnInit {
     }
 
     setCurrentDate() {
-        if (this.calenDate && moment(this.calenDate).format('DD-MM-YYYY') !== this.utilsService.getCurrentDate()) {
-            console.log('click')
-            this.utilsService.setCurrentDate(this.calenDate)
-        }
+        this.utilsService.setCurrentDate(this.calenDate)
     }
 }

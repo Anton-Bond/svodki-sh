@@ -43,14 +43,13 @@
                 class="ui-col-idx"
                 *ngFor="let col of columns"
             >
-                <p [ngStyle]="{'background-color': col.type === 'formula' ? '#ffdede' : 'inherit'}">
+                <p [ngStyle]="{'background-color': col.type === 'formula' || col.type === 'norm' ? '#ffdede' : 'inherit'}">
                     {{utilsService.numberToLetter(col.idx)}}
                 </p>
             </th>
         </tr>
     </ng-template>
 
-    <!-- SHOW WITH ALL REGIONS -->
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
             <td *ngFor="let col of columns">
@@ -67,7 +66,7 @@
                     <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.idx, rowData.data[col.idx])"></i>
                 </span>
                 <input
-                    *ngIf="col.type === 'value'"
+                    *ngIf="col.type === 'value' || col.type === 'norm'"
                     type="text" pInputText
                     [(ngModel)]="rowData.data[col.idx]"
                     class="ui-add-t-input-data p-inputtext-sm"
