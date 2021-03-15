@@ -57,4 +57,8 @@ export class SvtablesService {
     removeOne(svtableId: string): Observable<Svtable> {
         return this.http.delete<Svtable>(`${DB.url}/api/sv-table/${svtableId}`)
     }
+
+    updateOneRegion(svtableId: string, dataRow: any): Observable<any> {
+        return this.http.put<any>(`${DB.url}/api/sv-table/region/${svtableId}`, dataRow, this.httpOptions)
+    }
 }

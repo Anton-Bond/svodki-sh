@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import * as moment from 'moment'
 
 import { UtilsService } from '../../services/utils.service'
 import { AuthService } from '../../services/auth.service'
-import { ROLE } from '../../shared/constants'
+import { User } from '../../shared/interfaces'
 
 @Component({
   selector: 'app-header',
@@ -14,9 +13,8 @@ import { ROLE } from '../../shared/constants'
 export class HeaderComponent implements OnInit {
     blockContent: boolean
     currentDate: string
-    currentUserName: string = ''
-    isAdmin: boolean = false
     calenDate: Date
+    currentUser: User
 
     constructor(
         private utilsService: UtilsService,
@@ -37,8 +35,7 @@ export class HeaderComponent implements OnInit {
         )
         this.blockContent = this.utilsService.getBlockContent()
         this.currentDate = this.utilsService.getHumCurrentDate()
-        this.currentUserName = this.authService.getCurrentUser().name
-        this.isAdmin = this.authService.getCurrentUser().role === ROLE.ADMIN
+        this.currentUser = this.authService.getCurrentUser()
     }
 
     onLogout() {

@@ -7,6 +7,7 @@ import { AdminComponent } from './pages/admin/admin.component'
 import { UsersComponent } from './pages/admin/users/users.component'
 // import { EditUserComponent } from './pages/admin/edit-user/edit-user.component'
 import { SvodTableComponent } from './pages/svod-table/svod-table.component'
+import { FillInSvtableComponent } from './pages/svod-table/fill-in-svtable/fill-in-svtable.component'
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
         ]
     },
     { path: 'svod-table', component: SvodTableComponent },
+    { path: 'svod-table/region/:userId', component: FillInSvtableComponent },
     { path: 'not-found', component: NotFoundComponent },
     { path: '**', redirectTo: 'not-found' },
 ]

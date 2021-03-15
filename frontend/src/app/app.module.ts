@@ -45,6 +45,7 @@ import { EditSvtableComponent } from './pages/svod-table/edit-svtable/edit-svtab
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { FillInSvtableComponent } from './pages/svod-table/fill-in-svtable/fill-in-svtable.component';
 
 @NgModule({
     declarations: [
@@ -61,6 +62,7 @@ import { MessageModule } from 'primeng/message';
         AddNewSvtableComponent,
         FormulaInputModalComponent,
         EditSvtableComponent,
+        FillInSvtableComponent
     ],
     imports: [
         BrowserModule,

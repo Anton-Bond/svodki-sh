@@ -14,13 +14,23 @@
     </div>
 
     <div
-        *ngIf="isAdmin"
+        *ngIf="currentUser.role === 'ADMIN'"
         class="p-mr-2 ui-header-item ui-men-btn"
         routerLinkActive="active"
         [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}"
         [routerLink]="['/sv-admin', 'users']"
     >
         <i class="pi pi-users ui-icon-header"></i>
+    </div>
+
+    <div
+        *ngIf="currentUser.role === 'REGION'"
+        class="p-mr-2 ui-header-item ui-men-btn"
+        routerLinkActive="active"
+        [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}"
+        [routerLink]="['/svod-table', 'region', currentUser.userId]"
+    >
+        <i class="pi pi-pencil ui-icon-header"></i>
     </div>
 
     <div class="p-mr-2 ui-header-item p-ml-auto">
@@ -36,7 +46,7 @@
     ></p-calendar>
 
     <div class="p-mr-2 ui-header-item ui-u-name p-ml-auto">
-        {{currentUserName}}
+        {{currentUser.name}}
     </div>
 
     <div class="p-mr-2 ui-header-item ui-men-btn" [ngStyle]="{'pointer-events': blockContent ? 'none' : 'inherit'}" (click)="onLogout()">

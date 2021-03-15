@@ -1,0 +1,96 @@
+<div class="root">
+    <app-header></app-header>
+    <div class="table-tabs">
+        <ul>
+            <li
+                *ngFor="let tab of svtables; let i = index"
+                class="active-tab"
+                [ngStyle]="{'color': activeTab === i ? '#015fc2f0' : 'inherit', 'border-bottom':  activeTab === i ? '2px solid #015fc2f0' : '2px solid #c9c9c9'}"
+                (click)="toggleTab(i)"
+            >
+                {{tab.name ? (tab.name  | slice:0:15) + '...' : 'Без названия' }}
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <p-table
+            dataKey="id"
+            id="ui-view-svtable"
+            [columns]="currentSvtable.cols"
+            [value]="currentSvtable.rows"
+            styleClass="p-datatable-gridlines p-datatable-sm"
+            [resizableColumns]="true"
+            columnResizeMode="expand"
+        >
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <div>
+                        <p class="ui-nopadding">{{currentSvtable.name}}</p>
+                    </div>
+                    <div class="p-buttonset">
+                        <button pButton pRipple icon="pi pi-chevron-left" class="p-button-rounded p-button-text" (click)="toggleTabPrev()"></button>
+                        <button pButton pRipple label="Отправить" icon="pi pi-send" class="p-button-raised" (click)="onSubmit()"></button>
+                        <button pButton pRipple icon="pi pi-chevron-right" class="p-button-rounded p-button-text" (click)="toggleTabNext()"></button>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th pResizableColumn *ngFor="let col of columns">
+                        {{col.header || '(пусто)'}}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="product.code">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{product.code}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td pEditableColumn *ngFor="let col of columns">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input
+                                    pInputText
+                                    type="text"
+                                    *ngIf="col.type === 'value'"
+                                    class="p-inputtext-sm ui-inp-fill"
+                                    [(ngModel)]="rowData.data[col.idx]"
+                                >
+                                <span *ngIf="col.type !== 'value'">{{getCellValue(col, rowData.data)}}</span>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{getCellValue(col, rowData.data)}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <!-- <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+                        {{getCellValue(col, rowData.data)}}
+                    </td>
+                </tr>
+            </ng-template> -->
+        </p-table>
+    </div>
+</div>
+
+<!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast></p-toast> -->
