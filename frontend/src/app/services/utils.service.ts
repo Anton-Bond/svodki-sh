@@ -7,12 +7,20 @@ import * as moment from 'moment'
 })
 export class UtilsService {
     dateUpdated = new EventEmitter()
+    blockContentUpdated = new EventEmitter()
 
     private currentDate: string = moment().format('DD-MM-YYYY')
-    // currentDate: string = moment().locale('ru').format('LL')
-    // currentDate: string = moment().format('DD-MM-YYYY')
+    private blockContent: boolean = false
 
     constructor() { }
+
+    setBlockContent(value: boolean){
+        this.blockContent = value
+        this.blockContentUpdated.emit(this.blockContent)
+    }
+    getBlockContent(): boolean  {
+        return this.blockContent
+    }
 
     getCurrentDate() {
         return this.currentDate

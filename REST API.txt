@@ -144,6 +144,19 @@ RESPONSE
   "__v": 0
 }
 
+---------------------------------- CREATE SEVERAL
+POST: /api/sv-table/addNewSvatebles
+
+BODY
+{
+  "svtables": []
+}
+
+RESPONSE
+{
+  success: 'true'
+}
+
 --------------------------------- GET BY DATE
 GET: /api/sv-table/:svtableDate
 

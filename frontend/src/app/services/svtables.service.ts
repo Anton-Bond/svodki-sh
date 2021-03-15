@@ -28,6 +28,14 @@ export class SvtablesService {
         )
     }
 
+    addNewSvatebles(svtables: Svtable[]): Observable<any> {
+        return this.http.post<Svtable>(
+            `${DB.url}/api/sv-table/addNewSvatebles`,
+            svtables,
+            this.httpOptions
+        )
+    }
+
     getByDate(svtableDate: string): Observable<Svtable> {
         return this.http.get<Svtable>(`${DB.url}/api/sv-table/${svtableDate}`)
             // .pipe(map(data => ({

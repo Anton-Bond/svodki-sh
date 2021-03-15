@@ -42,6 +42,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { FormulaInputModalComponent } from './components/formula-input-modal/formula-input-modal.component';
 import { EditSvtableComponent } from './pages/svod-table/edit-svtable/edit-svtable.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
     declarations: [
@@ -88,6 +91,9 @@ import { EditSvtableComponent } from './pages/svod-table/edit-svtable/edit-svtab
         MultiSelectModule,
         DialogModule,
         ProgressBarModule,
+        ConfirmDialogModule,
+        MessagesModule,
+        MessageModule,
 
         AppRoutingModule       // can be last
     ],

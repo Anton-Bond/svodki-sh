@@ -24,7 +24,9 @@
 
 .table-tabs>ul>li {
     padding: .6rem;
-    display: list-item;
+    // display: list-item;
+    display : inline-block;
+    white-space: nowrap;
     list-style-type: none;
     cursor: pointer;
 }
