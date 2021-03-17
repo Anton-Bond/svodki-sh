@@ -76,7 +76,7 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
 
     getCellValue(col: any, data: string[]): any {
         const value = data[col.idx]
-        if (col.type === 'formula') {
+        if (col.type === 'formula' || col.type === 'percentage') {
             const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
                 const idx = this.utilsServive.letterToNumber(match)
                 return data[idx] ?  data[idx] : '0'

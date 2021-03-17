@@ -61,7 +61,7 @@
 
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                    <td pEditableColumn *ngFor="let col of columns">
+                    <td pEditableColumn *ngFor="let col of columns"  [ngStyle]="{'background-color': col.type === 'value'? 'inherit' : '#fff499'}">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input
@@ -71,10 +71,10 @@
                                     class="p-inputtext-sm ui-inp-fill"
                                     [(ngModel)]="rowData.data[col.idx]"
                                 >
-                                <span *ngIf="col.type !== 'value'">{{getCellValue(col, rowData.data)}}</span>
+                                <span *ngIf="col.type !== 'value'">{{getCellValue(col, rowData.data)}} <span *ngIf="col.type === 'percentage'">%</span></span>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{getCellValue(col, rowData.data)}}
+                                {{getCellValue(col, rowData.data)}} <span *ngIf="col.type === 'percentage'">%</span>
                             </ng-template>
                         </p-cellEditor>
                     </td>
