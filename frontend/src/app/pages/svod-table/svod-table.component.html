@@ -70,7 +70,7 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
                     <td *ngFor="let col of columns">
-                        {{getCellValue(col, rowData.data)}}
+                        {{getCellValue(col, rowData.data)}} <span *ngIf="col.type === 'percentage'">%</span>
                     </td>
                 </tr>
             </ng-template>
@@ -78,7 +78,8 @@
             <ng-template pTemplate="footer" let-columns>
                 <tr>
                     <td *ngFor="let col of columns">
-                        {{getColTotal(col)}}
+                        <span *ngIf="col.type !== 'percentage'">{{total[col.idx]}}</span>
+                        <span *ngIf="col.type === 'percentage'">{{getCellValue(col, total)}} %</span>
                     </td>
                 </tr>
             </ng-template>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmationService, MessageService } from 'primeng/api'
 import * as _ from 'lodash'
@@ -15,7 +15,7 @@ import { UsersService } from '../../../services/users.service'
   styleUrls: ['./fill-in-svtable.component.scss'],
   providers: [ConfirmationService, MessageService]
 })
-export class FillInSvtableComponent implements OnInit {
+export class FillInSvtableComponent implements OnInit, OnDestroy {
     blockContent: boolean
     currentDate: string = ''
     svtables: Svtable[]
@@ -45,13 +45,10 @@ export class FillInSvtableComponent implements OnInit {
             this.currentSvtable = svtables.length > 0 ? this.getCurrentSvatableRegionData(svtables[0]) : null
         })
 
-        this.utilsServive.blockContentUpdated.subscribe(
-            () => {
-                this.blockContent = this.utilsService.getBlockContent()
-            }
-        )
-        this.blockContent = this.utilsService.getBlockContent()
+        this.utilsService.setBlockContent(true)
     }
+
+    ngOnDestroy() { this.utilsService.setBlockContent(false) }
 
     getCurrentSvatableRegionData(svtable: Svtable): Svtable {
         return ({ ...svtable, rows:  svtable.rows.filter(row => row.region === this.currentUser.name) })
@@ -96,7 +93,11 @@ export class FillInSvtableComponent implements OnInit {
 
     onSubmit() {
         this.svtablesService.updateOneRegion(this.currentSvtable.svtableId, this.currentSvtable.rows[0]).subscribe(res => {
-            alert(res.success)
+            if (res.success === 'true') {
+                this.messageService.add({severity:'success', summary:'Успешно', detail:'Данные сохранены'})
+            } else {
+                this.messageService.add({severity:'error', summary:'Ошибка', detail:'Не удалось сохранить данные'})
+            }
         })
     }
 

@@ -62,7 +62,7 @@ import { FillInSvtableComponent } from './pages/svod-table/fill-in-svtable/fill-
         AddNewSvtableComponent,
         FormulaInputModalComponent,
         EditSvtableComponent,
-        FillInSvtableComponent
+        FillInSvtableComponent,
     ],
     imports: [
         BrowserModule,
