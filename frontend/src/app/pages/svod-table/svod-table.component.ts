@@ -78,7 +78,6 @@ export class SvodTableComponent implements OnInit {
                 }
             })
             this.total.unshift('Всего:')
-            console.log('>>', this.total)
         })
 
         // TO DO: get value from server
