@@ -76,7 +76,8 @@ export class EditSvtableComponent implements OnInit {
             {label: 'Удалить колонку', icon: 'pi pi-minus-circle', command: () => this.deleteColumn(this.selectedCol)},
             {label: 'Формат', icon: 'pi pi-sliders-h', items: [
                 {label: 'Значение', icon: 'pi pi-pencil', command: () => this.setValueCol(this.selectedCol)},
-                {label: 'Формула', icon: 'pi pi-percentage', command: () => this.setFormulaCol(this.selectedCol)},
+                {label: 'Формула', icon: 'pi pi-link', command: () => this.setFormulaCol(this.selectedCol)},
+                {label: 'Процент', icon: 'pi pi-percentage', command: () => this.setPercentageCol(this.selectedCol)},
                 {label: 'Норматив', icon: 'pi pi-book', command: () => this.setNormfCol(this.selectedCol)}
             ]}
         ];
@@ -113,6 +114,15 @@ export class EditSvtableComponent implements OnInit {
         this.svtable.cols.forEach(c => {
             if (c.idx === idx) {
                 c.type = 'formula'
+            }
+        })
+        this.selectedCol = 0
+    }
+
+    setPercentageCol(idx: number) {
+        this.svtable.cols.forEach(c => {
+            if (c.idx === idx) {
+                c.type = 'percentage'
             }
         })
         this.selectedCol = 0

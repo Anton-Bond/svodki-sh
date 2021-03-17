@@ -16,6 +16,8 @@ router.post('/on-current-date/:currentDate', controller.setOnCurrentDate)
 
 router.delete('/:svtableId', controller.removeOne)
 
+router.put('/region/:svtableId', controller.updateOneRegion)
+
 // router.get('/:svtableId', controller.findById)
 
 module.exports = router

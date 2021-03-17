@@ -130,6 +130,30 @@ module.exports.removeOne = async (req, res) => {
     }
 };
 
+module.exports.updateOneRegion = async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({ success: 'false' })
+    }
+
+    try {
+        const svtable = await Svtable.findOne({ svtableId: req.params.svtableId })
+        if (svtable) {
+            const newRows = JSON.parse(svtable.rows).map(row => row.region === req.body.region ? req.body : row)
+
+            const newSvtable = await Svtable.findOneAndUpdate(
+                { svtableId: req.params.svtableId },
+                { rows: JSON.stringify(newRows) },
+                { upsert: true }
+            );
+            res.status(200).json({ success: 'true', svtable: newSvtable });
+        } else {
+            res.status(404).send({ success: 'false' })
+        }
+    } catch (e) {
+        res.status(404).send(e.message || 'Some error occurred while updating Svtable.');
+    }
+};
+
 
 
 

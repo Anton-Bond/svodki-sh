@@ -43,7 +43,7 @@
                 class="ui-col-idx"
                 *ngFor="let col of columns"
             >
-                <p [ngStyle]="{'background-color': col.type === 'formula' || col.type === 'norm' ? '#ffdede' : 'inherit'}">
+                <p [ngStyle]="{'background-color': col.type === 'formula' || col.type === 'norm' || col.type === 'percentage'? '#ffdede' : 'inherit'}">
                     {{utilsService.numberToLetter(col.idx)}}
                 </p>
             </th>
@@ -53,7 +53,7 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
             <td *ngFor="let col of columns">
-                <span *ngIf="col.type === 'formula'">
+                <span *ngIf="col.type === 'formula' || col.type === 'percentage'">
                     <label class="ui-add-t-name-body">f = </label>
                     <input
                         pInputText
@@ -63,6 +63,7 @@
                         class="p-inputtext-sm"
                         [ngStyle]="{'width': '70%'}"
                     />
+                    <label class="ui-add-t-name-body" *ngIf="col.type === 'percentage'"> % </label>
                     <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.idx, rowData.data[col.idx])"></i>
                 </span>
                 <input

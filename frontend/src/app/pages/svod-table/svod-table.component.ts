@@ -31,6 +31,7 @@ export class SvodTableComponent implements OnInit {
     activeTab: number = 0
     frozenCols: any[] = [{ idx: 0, header: 'Районы', type: 'name' }]
     fromDate: Date
+    total: any[]
 
     constructor(
         private utilsService: UtilsService,
@@ -69,7 +70,16 @@ export class SvodTableComponent implements OnInit {
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
+            this.total = this.currentSvtable.cols.map(col => {
+                if (col.type === 'percentage') {
+                    return this.currentSvtable.rows[0].data[col.idx]
+                } else {
+                    return this.getColTotal(col)
+                }
+            })
+            this.total.unshift('Всего:')
         })
+
         // TO DO: get value from server
         this.ableEdit = this.authService.isEditable()
     }
@@ -136,14 +146,13 @@ export class SvodTableComponent implements OnInit {
 
     getCellValue(col: any, data: string[]): any {
         const value = data[col.idx]
-        if (col.type === 'formula') {
+        if (col.type === 'formula' || col.type === 'percentage') {
             const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
                 const idx = this.utilsServive.letterToNumber(match)
                 return data[idx] ?  data[idx] : '0'
             })
             try {
-                // return eval(cod)
-                return eval(cod) ? _.round(_.toNumber(eval(cod)), 2) : '0'
+                return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
             } catch {
                 return '?ошибка формулы'
             }
@@ -164,7 +173,7 @@ export class SvodTableComponent implements OnInit {
                 return sum + 0
             }, 0)
 
-            return total ? _.round(total, 2) : '0'
+            return total ? _.round(total, 2) : 0
         }
     }
 

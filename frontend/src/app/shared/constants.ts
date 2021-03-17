@@ -2,13 +2,15 @@ export const ROLE = {
     ROOT: 'ROOT',
     ADMIN: 'ADMIN',
     DISP: 'DISP',
-    REGION: 'REGION'
+    REGION: 'REGION',
+    SUPERVISOR: 'SUPERVISOR'
 }
 
 export const ROLES = [
     { type: ROLE.ADMIN, name: ' Администратор' },
     { type: ROLE.DISP, name: ' Диспетчер' },
     { type: ROLE.REGION, name: ' Районое управление с/х' },
+    { type: ROLE.SUPERVISOR, name: ' Руководитель' }
 ]
 
 export const REGIONS = [
