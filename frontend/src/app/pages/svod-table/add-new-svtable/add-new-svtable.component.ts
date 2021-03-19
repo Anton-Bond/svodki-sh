@@ -22,6 +22,7 @@ export class AddNewSvtableComponent implements OnInit {
         svtableDate: moment().format('17-02-2021'),
         // svtableDate: moment().format('DD-MM-YYYY'),
         name: '',
+        exth: [],
         cols: [],
         rows: []
     }

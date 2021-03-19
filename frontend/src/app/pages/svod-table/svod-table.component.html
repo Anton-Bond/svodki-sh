@@ -60,6 +60,15 @@
             </ng-template>
 
             <ng-template pTemplate="header" let-columns>
+                <tr *ngFor="let extHRow of currentSvtable.exth; let y=index">
+                    <th *ngFor="let extH of extHRow; let x=index" [attr.colspan]="extH.colspan">
+                        <section class="zx">
+                            {{extH.value || '(пусто)'}}
+                            <!-- <input type="text" pInputText [(ngModel)]="extH.value" [ngStyle]="{'width': '80%', 'margin-right': '0.5rem'}" /> -->
+                        </section>
+                    </th>
+                </tr>
+
                 <tr>
                     <th pResizableColumn *ngFor="let col of columns">
                         {{col.header || '(пусто)'}}

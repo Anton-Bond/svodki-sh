@@ -24,6 +24,7 @@ export class EditSvtableComponent implements OnInit {
     emptySvtable: Svtable = {
         svtableDate: '',
         name: '',
+        exth: [],
         cols: [],
         rows: []
     }
@@ -33,7 +34,7 @@ export class EditSvtableComponent implements OnInit {
     exItems: MenuItem[]
     frozenCols: any[] = [{ idx: 0, header: 'Районы', type: 'name'  }]
 
-    extHRows: any[] = []
+    // extHRows: any[] = []
 
     screenHeight: number
     screenWidth: number
@@ -95,21 +96,21 @@ export class EditSvtableComponent implements OnInit {
         for (let i = 0; i < this.svtable.cols.length; i++) {
             initRow.push({ colspan: 1, value: ''})
         }
-        this.extHRows.unshift(initRow)
+        this.svtable.exth.unshift(initRow)
     }
 
     deleteHRow() {
-        this.extHRows.shift()
+        this.svtable.exth.shift()
     }
 
     extHColToRight(y: number, x: number) {
-        this.extHRows[y][x].colspan += this.extHRows[y][x+1].colspan
-        this.extHRows[y].splice(x+1, 1)
+        this.svtable.exth[y][x].colspan += this.svtable.exth[y][x+1].colspan
+        this.svtable.exth[y].splice(x+1, 1)
     }
 
     extHColToLeft(y: number, x: number) {
-        this.extHRows[y][x].colspan--
-        this.extHRows[y].splice(x+1, 0, { colspan: 1, value: ''})
+        this.svtable.exth[y][x].colspan--
+        this.svtable.exth[y].splice(x+1, 0, { colspan: 1, value: ''})
     }
 
     addColumn(idx: number) {
@@ -120,13 +121,12 @@ export class EditSvtableComponent implements OnInit {
         )
         tempCols.splice(newtIdx, 0, { idx: newtIdx, header: '', type: 'value'  })
         this.svtable.cols = sortBy(tempCols, c => c.idx)
-
         // related ROWS
         this.svtable.rows.forEach(r => r.data.splice(newtIdx, 0, ''))
+        // related exth
+        this.svtable.exth.forEach(r => r.splice(newtIdx-1, 0, { colspan: 1, value: ''}))
+
         this.selectedCol = 0
-        for (let i=0; i < this.extHRows.length; i++) {
-            this.extHColToRight(i, idx)
-        }
     }
 
     deleteColumn(idx: number) {
@@ -136,9 +136,11 @@ export class EditSvtableComponent implements OnInit {
         this.svtable.cols = sortBy(tempCols.map(col =>
             col.idx > idx ? ({ idx: --col.idx, header: col.header, type: col.type }) : col
         ), c => c.idx)
-
         // related ROWS
         this.svtable.rows.forEach(r => r.data.splice(idx, 1))
+        // related exth
+        this.svtable.exth.forEach(r => r.splice(idx-1, 1))
+
         this.selectedCol = 0
     }
 
@@ -240,24 +242,4 @@ export class EditSvtableComponent implements OnInit {
             )
         }
     }
-
-    // addExHeader() {
-    //     // related COLS
-    //     const newtIdx = this.currentCol + 1
-    //     const tempCols = this.svtable.cols.map(col =>
-    //         col.idx > this.currentCol ? ({ idx: ++col.idx, header: col.header, type: col.type }) : col
-    //     )
-    //     tempCols.splice(newtIdx, 0, { idx: newtIdx, header: '', type: 'value'  })
-    //     this.svtable.cols = sortBy(tempCols, c => c.idx)
-
-    //     // related ROWS
-    //     this.svtable.rows.forEach(r => r.data.splice(newtIdx, 0, ''))
-    // }
-
-    // addColumnToTheEnd() {
-    //     const nextIdx = this.svtable.cols.reduce((res, curr) => curr.idx > res ? curr.idx : res, 1) + 1
-    //     this.svtable.cols.push({ idx: nextIdx, header: '', type: 'value' })
-    //     this.svtable.rows = this.svtable.rows.map(r => pickBy({ ...r, ['C' + nextIdx]: '' }, v => true ))
-    // }
-
 }

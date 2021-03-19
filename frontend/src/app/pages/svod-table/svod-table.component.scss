@@ -56,6 +56,9 @@
     margin: 0;
 }
 
-// ::ng-deep {
-// }
+::ng-deep {
+    .p-datatable-scrollable-view.p-datatable-frozen-view .p-datatable-scrollable-header-table .ng-star-inserted .ng-star-inserted:first-child .zx {
+        display: none;
+    }
+}
 

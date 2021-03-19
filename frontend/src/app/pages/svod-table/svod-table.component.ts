@@ -68,6 +68,7 @@ export class SvodTableComponent implements OnInit {
     initData() {
         this.currentDate = this.utilsService.getCurrentDate()
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
+            console.log('tables >>', svtables)
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
             this.total = this.currentSvtable.cols.map(col => {

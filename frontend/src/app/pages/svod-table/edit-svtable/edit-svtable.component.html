@@ -30,7 +30,7 @@
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>
-        <tr *ngFor="let extHRow of extHRows; let y=index">
+        <tr *ngFor="let extHRow of svtable.exth; let y=index">
             <th *ngFor="let extH of extHRow; let x=index" [attr.colspan]="extH.colspan">
                 <section class="zx">
                     <input type="text" pInputText [(ngModel)]="extH.value" [ngStyle]="{'width': '80%', 'margin-right': '0.5rem'}" />
