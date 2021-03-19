@@ -3,6 +3,10 @@
     #ui-new-svtable .p-datatable-header {
         display: flex;
     }
+
+    .p-datatable-scrollable-view.p-datatable-frozen-view .p-datatable-scrollable-header-table .ng-star-inserted .ng-star-inserted:first-child .zx {
+        display: none;
+    }
 }
 
 .ui-tadd-btngroup {

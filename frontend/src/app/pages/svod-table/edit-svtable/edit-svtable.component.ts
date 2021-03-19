@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { HostListener } from "@angular/core"
 import * as moment from 'moment'
-import { sortBy, times } from 'lodash'
+import { sortBy, pickBy } from 'lodash'
 import { MenuItem } from 'primeng/api'
 import { DialogService } from 'primeng/dynamicdialog'
 
@@ -30,7 +30,10 @@ export class EditSvtableComponent implements OnInit {
     svtable: Svtable
     selectedCol: number = 0
     items: MenuItem[]
+    exItems: MenuItem[]
     frozenCols: any[] = [{ idx: 0, header: 'Районы', type: 'name'  }]
+
+    extHRows: any[] = []
 
     screenHeight: number
     screenWidth: number
@@ -72,15 +75,41 @@ export class EditSvtableComponent implements OnInit {
         }
 
         this.items = [
-            {label: 'Добавть колонку', icon: 'pi pi-plus-circle', command: () => this.addColumn(this.selectedCol)},
-            {label: 'Удалить колонку', icon: 'pi pi-minus-circle', command: () => this.deleteColumn(this.selectedCol)},
-            {label: 'Формат', icon: 'pi pi-sliders-h', items: [
-                {label: 'Значение', icon: 'pi pi-pencil', command: () => this.setValueCol(this.selectedCol)},
-                {label: 'Формула', icon: 'pi pi-link', command: () => this.setFormulaCol(this.selectedCol)},
-                {label: 'Процент', icon: 'pi pi-percentage', command: () => this.setPercentageCol(this.selectedCol)},
-                {label: 'Норматив', icon: 'pi pi-book', command: () => this.setNormfCol(this.selectedCol)}
-            ]}
-        ];
+            { label: 'Формат', icon: 'pi pi-sliders-h', items: [
+                { label: 'Значение', icon: 'pi pi-pencil', command: () => this.setValueCol(this.selectedCol) },
+                { label: 'Формула', icon: 'pi pi-link', command: () => this.setFormulaCol(this.selectedCol) },
+                { label: 'Процент', icon: 'pi pi-percentage', command: () => this.setPercentageCol(this.selectedCol) },
+                { label: 'Норматив', icon: 'pi pi-book', command: () => this.setNormfCol(this.selectedCol) }
+            ]},
+            { separator:true },
+            { label: 'Добавить стоблец', icon: 'pi pi-plus', command: () => this.addColumn(this.selectedCol) },
+            { label: 'Удалить столбец', icon: 'pi pi-times', command: () => this.deleteColumn(this.selectedCol) },
+            { separator:true },
+            { label: 'Добавть строку', icon: 'pi pi-caret-up', command: () => this.addHRow() },
+            { label: 'Удалить строку', icon: 'pi pi-caret-down', command: () => this.deleteHRow() }
+        ]
+    }
+
+    addHRow() {
+        let initRow = []
+        for (let i = 0; i < this.svtable.cols.length; i++) {
+            initRow.push({ colspan: 1, value: ''})
+        }
+        this.extHRows.unshift(initRow)
+    }
+
+    deleteHRow() {
+        this.extHRows.shift()
+    }
+
+    extHColToRight(y: number, x: number) {
+        this.extHRows[y][x].colspan += this.extHRows[y][x+1].colspan
+        this.extHRows[y].splice(x+1, 1)
+    }
+
+    extHColToLeft(y: number, x: number) {
+        this.extHRows[y][x].colspan--
+        this.extHRows[y].splice(x+1, 0, { colspan: 1, value: ''})
     }
 
     addColumn(idx: number) {
@@ -95,6 +124,9 @@ export class EditSvtableComponent implements OnInit {
         // related ROWS
         this.svtable.rows.forEach(r => r.data.splice(newtIdx, 0, ''))
         this.selectedCol = 0
+        for (let i=0; i < this.extHRows.length; i++) {
+            this.extHColToRight(i, idx)
+        }
     }
 
     deleteColumn(idx: number) {
@@ -208,4 +240,24 @@ export class EditSvtableComponent implements OnInit {
             )
         }
     }
+
+    // addExHeader() {
+    //     // related COLS
+    //     const newtIdx = this.currentCol + 1
+    //     const tempCols = this.svtable.cols.map(col =>
+    //         col.idx > this.currentCol ? ({ idx: ++col.idx, header: col.header, type: col.type }) : col
+    //     )
+    //     tempCols.splice(newtIdx, 0, { idx: newtIdx, header: '', type: 'value'  })
+    //     this.svtable.cols = sortBy(tempCols, c => c.idx)
+
+    //     // related ROWS
+    //     this.svtable.rows.forEach(r => r.data.splice(newtIdx, 0, ''))
+    // }
+
+    // addColumnToTheEnd() {
+    //     const nextIdx = this.svtable.cols.reduce((res, curr) => curr.idx > res ? curr.idx : res, 1) + 1
+    //     this.svtable.cols.push({ idx: nextIdx, header: '', type: 'value' })
+    //     this.svtable.rows = this.svtable.rows.map(r => pickBy({ ...r, ['C' + nextIdx]: '' }, v => true ))
+    // }
+
 }

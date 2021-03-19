@@ -192,6 +192,16 @@ export class SvodTableComponent implements OnInit {
                 return table
             })
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
+
+            this.total = this.currentSvtable.cols.map(col => {
+                if (col.type === 'percentage') {
+                    return this.currentSvtable.rows[0].data[col.idx]
+                } else {
+                    return this.getColTotal(col)
+                }
+            })
+            this.total.unshift('Всего:')
+
             if (svtables.length) {
                 this.confirmationService.confirm({
                     message: `Вы действительно хотите импортивовать исходные таблицы от ${moment(this.fromDate).locale('ru').format('LL')}?`,

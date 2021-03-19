@@ -30,6 +30,15 @@
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>
+        <tr *ngFor="let extHRow of extHRows; let y=index">
+            <th *ngFor="let extH of extHRow; let x=index" [attr.colspan]="extH.colspan">
+                <section class="zx">
+                    <input type="text" pInputText [(ngModel)]="extH.value" [ngStyle]="{'width': '80%', 'margin-right': '0.5rem'}" />
+                    <i *ngIf="extH.colspan > 1" class="pi pi-chevron-left" (click)="extHColToLeft(y, x)"></i>
+                    <i class="pi pi-chevron-right" (click)="extHColToRight(y, x)"></i>
+                </section>
+            </th>
+        </tr>
         <tr>
             <th pResizableColumn *ngFor="let col of columns">
                 <input *ngIf="col.type !== 'name'" type="text" pInputText [(ngModel)]="col.header" class="ui-add-t-input-header" />
