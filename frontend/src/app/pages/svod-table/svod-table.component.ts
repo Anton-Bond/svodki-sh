@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api'
 import { HostListener } from "@angular/core"
 import * as _ from 'lodash'
 import * as moment from 'moment'
+import * as XLSX from 'xlsx'
 
 import { Svtable } from '../../shared/interfaces'
 import { SvtablesService } from '../../services/svtables.service'
@@ -68,7 +69,6 @@ export class SvodTableComponent implements OnInit {
     initData() {
         this.currentDate = this.utilsService.getCurrentDate()
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
-            console.log('tables >>', svtables)
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
             this.total = this.currentSvtable.cols.map(col => {
@@ -232,6 +232,28 @@ export class SvodTableComponent implements OnInit {
             } else {
                 this.messageService.add({severity:'info', summary:'Нет данных', detail:'На выбранную дату нет сводных таблиц'})
             }
+        })
+    }
+
+    exportExcel() {
+        const wb: XLSX.WorkBook = XLSX.utils.book_new()
+        this.svtables.forEach((table, i) => {
+            const ws: XLSX.WorkSheet = this.utilsService.svtableToSheet(table)
+            XLSX.utils.book_append_sheet(wb, ws, `${i+1}.${_.truncate(table.name, {'length': 15})}`)
+        })
+
+        const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+        this.saveAsExcelFile(excelBuffer, "Сводка")
+    }
+
+    saveAsExcelFile(buffer: any, fileName: string): void {
+        import("file-saver").then(FileSaver => {
+            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            let EXCEL_EXTENSION = '.xlsx'
+            const data: Blob = new Blob([buffer], {
+                type: EXCEL_TYPE
+            })
+            FileSaver.saveAs(data, fileName + '__' + this.currentDate + EXCEL_EXTENSION)
         })
     }
 }

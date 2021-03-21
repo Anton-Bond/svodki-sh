@@ -43,13 +43,25 @@
                     <div>
                         <p class="ui-nopadding">{{currentSvtable.name}}</p>
                     </div>
-                    <button
-                        *ngIf="ableEdit"
-                        pButton type="button"
-                        icon="pi pi-pencil"
-                        class="p-button-warning p-button-rounded"
-                        (click)="toggleEditable()"
-                    ></button>
+                    <div>
+                        <button
+                            type="button"
+                            pButton pRipple
+                            icon="pi pi-file-excel"
+                            (click)="exportExcel()"
+                            class="p-button-success p-mr-2 p-button-rounded"
+                            pTooltip="XLS"
+                            tooltipPosition="bottom"
+                        ></button>
+                        <button
+                            *ngIf="ableEdit"
+                            pButton type="button"
+                            icon="pi pi-pencil"
+                            class="p-button-warning p-button-rounded"
+                            [ngStyle]="{'margin-left': '1rem'}"
+                            (click)="toggleEditable()"
+                        ></button>
+                    </div>
                 </div>
             </ng-template>
 
@@ -63,8 +75,7 @@
                 <tr *ngFor="let extHRow of currentSvtable.exth; let y=index">
                     <th *ngFor="let extH of extHRow; let x=index" [attr.colspan]="extH.colspan">
                         <section class="zx">
-                            {{extH.value || '(пусто)'}}
-                            <!-- <input type="text" pInputText [(ngModel)]="extH.value" [ngStyle]="{'width': '80%', 'margin-right': '0.5rem'}" /> -->
+                            {{extH.value || ''}}
                         </section>
                     </th>
                 </tr>
