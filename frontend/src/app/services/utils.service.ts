@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core'
 import { EventEmitter } from '@angular/core'
 import * as moment from 'moment'
+import * as _ from 'lodash'
+import * as XLSX from 'xlsx'
+
+import { Svtable } from '../shared/interfaces'
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +58,77 @@ export class UtilsService {
             res += num + i * 25
         })
         return res
+    }
+
+    getCellValue(col: any, data: string[]): any {
+        const value = data[col.idx]
+        if (col.type === 'formula' || col.type === 'percentage') {
+            const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+                const idx = this.letterToNumber(match)
+                return data[idx] ?  data[idx] : '0'
+            })
+            try {
+                return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
+            } catch {
+                return '?ошибка формулы'
+            }
+        } else {
+            return value
+        }
+    }
+
+    getColTotal(col: any, svtable: Svtable): any {
+        if (col.idx === 0) {
+            return 'Всего:'
+        } else {
+            const total = svtable.rows.reduce((sum, row) => {
+                const value = this.getCellValue(col, row.data)
+                if (_.isString(value) && value) {
+                    return sum + _.toNumber(value.replace(/,/, '.'))
+                }
+                return sum + 0
+            }, 0)
+
+            return total ? _.round(total, 2) : 0
+        }
+    }
+
+    svtableToSheet(table: Svtable): any {
+        const result = []
+
+        const exth = []
+        table.exth.forEach(row => {
+            const temp = ['']
+            row.forEach(el => {
+                temp.push(el.value)
+                for (let i=1; i < el.colspan; i++) {
+                    temp.push('')
+                }
+            })
+            exth.push(temp)
+        })
+
+        const header = ['Районы']
+
+        const total = table.cols.map(col => {
+            if (col.type === 'percentage') {
+                return table.rows[0].data[col.idx]
+            } else {
+                return this.getColTotal(col, table)
+            }
+        })
+        total.unshift('Всего:')
+
+        table.cols.forEach((col, i) => {
+            header.push(col.header)
+            if (col.type === 'percentage') {
+                total[i+1] = _.toNumber(this.getCellValue(col, total))
+            }
+        })
+        const data = table.rows.map(
+            row => row.data.map((_, i) => i === 0 ? row.data[0] : this.getCellValue(table.cols[i-1], row.data))
+        )
+
+        return XLSX.utils.aoa_to_sheet(result.concat([['', table.name]], [['']], exth, [header], data, [total]))
     }
 }

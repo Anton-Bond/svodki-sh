@@ -12,6 +12,9 @@ const svtableSchema = new Schema({
     name: {
         type: String
     },
+    exth: {
+        type: String
+    },
     cols: {
         type: String
     },

@@ -45,7 +45,7 @@
     background: var(--surface-e);
     padding: .5rem;
     border-radius: 4px;
-    margin: 1rem;
+    margin: .5rem 1rem;
     -webkit-box-shadow: 1px 1px 16px 0px rgba(34, 60, 80, 0.2);
     -moz-box-shadow: 1px 1px 16px 0px rgba(34, 60, 80, 0.2);
     box-shadow: 1px 1px 16px 0px rgba(34, 60, 80, 0.2);
@@ -56,6 +56,9 @@
     margin: 0;
 }
 
-// ::ng-deep {
-// }
+::ng-deep {
+    .p-datatable-scrollable-view.p-datatable-frozen-view .p-datatable-scrollable-header-table .ng-star-inserted .ng-star-inserted:first-child .zx {
+        display: none;
+    }
+}
 

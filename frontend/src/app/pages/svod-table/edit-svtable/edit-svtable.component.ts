@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
 import { HostListener } from "@angular/core"
 import * as moment from 'moment'
-import { sortBy, times } from 'lodash'
+import { sortBy, pickBy } from 'lodash'
 import { MenuItem } from 'primeng/api'
 import { DialogService } from 'primeng/dynamicdialog'
 
@@ -24,13 +24,17 @@ export class EditSvtableComponent implements OnInit {
     emptySvtable: Svtable = {
         svtableDate: '',
         name: '',
+        exth: [],
         cols: [],
         rows: []
     }
     svtable: Svtable
     selectedCol: number = 0
     items: MenuItem[]
+    exItems: MenuItem[]
     frozenCols: any[] = [{ idx: 0, header: 'Районы', type: 'name'  }]
+
+    // extHRows: any[] = []
 
     screenHeight: number
     screenWidth: number
@@ -72,15 +76,41 @@ export class EditSvtableComponent implements OnInit {
         }
 
         this.items = [
-            {label: 'Добавть колонку', icon: 'pi pi-plus-circle', command: () => this.addColumn(this.selectedCol)},
-            {label: 'Удалить колонку', icon: 'pi pi-minus-circle', command: () => this.deleteColumn(this.selectedCol)},
-            {label: 'Формат', icon: 'pi pi-sliders-h', items: [
-                {label: 'Значение', icon: 'pi pi-pencil', command: () => this.setValueCol(this.selectedCol)},
-                {label: 'Формула', icon: 'pi pi-link', command: () => this.setFormulaCol(this.selectedCol)},
-                {label: 'Процент', icon: 'pi pi-percentage', command: () => this.setPercentageCol(this.selectedCol)},
-                {label: 'Норматив', icon: 'pi pi-book', command: () => this.setNormfCol(this.selectedCol)}
-            ]}
-        ];
+            { label: 'Формат', icon: 'pi pi-sliders-h', items: [
+                { label: 'Значение', icon: 'pi pi-pencil', command: () => this.setValueCol(this.selectedCol) },
+                { label: 'Формула', icon: 'pi pi-link', command: () => this.setFormulaCol(this.selectedCol) },
+                { label: 'Процент', icon: 'pi pi-percentage', command: () => this.setPercentageCol(this.selectedCol) },
+                { label: 'Норматив', icon: 'pi pi-book', command: () => this.setNormfCol(this.selectedCol) }
+            ]},
+            { separator:true },
+            { label: 'Добавить стоблец', icon: 'pi pi-plus', command: () => this.addColumn(this.selectedCol) },
+            { label: 'Удалить столбец', icon: 'pi pi-times', command: () => this.deleteColumn(this.selectedCol) },
+            { separator:true },
+            { label: 'Добавть строку', icon: 'pi pi-caret-up', command: () => this.addHRow() },
+            { label: 'Удалить строку', icon: 'pi pi-caret-down', command: () => this.deleteHRow() }
+        ]
+    }
+
+    addHRow() {
+        let initRow = []
+        for (let i = 0; i < this.svtable.cols.length; i++) {
+            initRow.push({ colspan: 1, value: ''})
+        }
+        this.svtable.exth.unshift(initRow)
+    }
+
+    deleteHRow() {
+        this.svtable.exth.shift()
+    }
+
+    extHColToRight(y: number, x: number) {
+        this.svtable.exth[y][x].colspan += this.svtable.exth[y][x+1].colspan
+        this.svtable.exth[y].splice(x+1, 1)
+    }
+
+    extHColToLeft(y: number, x: number) {
+        this.svtable.exth[y][x].colspan--
+        this.svtable.exth[y].splice(x+1, 0, { colspan: 1, value: ''})
     }
 
     addColumn(idx: number) {
@@ -91,9 +121,11 @@ export class EditSvtableComponent implements OnInit {
         )
         tempCols.splice(newtIdx, 0, { idx: newtIdx, header: '', type: 'value'  })
         this.svtable.cols = sortBy(tempCols, c => c.idx)
-
         // related ROWS
         this.svtable.rows.forEach(r => r.data.splice(newtIdx, 0, ''))
+        // related exth
+        this.svtable.exth.forEach(r => r.splice(newtIdx-1, 0, { colspan: 1, value: ''}))
+
         this.selectedCol = 0
     }
 
@@ -104,9 +136,11 @@ export class EditSvtableComponent implements OnInit {
         this.svtable.cols = sortBy(tempCols.map(col =>
             col.idx > idx ? ({ idx: --col.idx, header: col.header, type: col.type }) : col
         ), c => c.idx)
-
         // related ROWS
         this.svtable.rows.forEach(r => r.data.splice(idx, 1))
+        // related exth
+        this.svtable.exth.forEach(r => r.splice(idx-1, 1))
+
         this.selectedCol = 0
     }
 

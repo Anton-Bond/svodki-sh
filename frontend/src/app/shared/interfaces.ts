@@ -14,6 +14,7 @@ export interface Message {
 export interface Svtable {
     svtableDate: string
     name: string
+    exth: any[]
     cols: any[]
     rows: any[]
     svtableId?: string
