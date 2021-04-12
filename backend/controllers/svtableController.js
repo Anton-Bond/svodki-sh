@@ -14,9 +14,9 @@ module.exports.create = async function (req, res) {
         svtableId: uuidv4(),
         svtableDate: req.body.svtableDate,
         name: req.body.name,
-        exth: req.body?.exth ? JSON.stringify(req.body.exth) : '',
-        cols: req.body?.cols ? JSON.stringify(req.body.cols) : '',
-        rows: req.body?.rows ? JSON.stringify(req.body.rows) : ''
+        exth: req.body.exth ? JSON.stringify(req.body.exth) : '',
+        cols: req.body.cols ? JSON.stringify(req.body.cols) : '',
+        rows: req.body.rows ? JSON.stringify(req.body.rows) : ''
     });
 
     try {
@@ -40,9 +40,9 @@ module.exports.addNewSvatebles = async function (req, res) {
         svtableId: uuidv4(),
         svtableDate: req.body.svtableDate,
         name: req.body.name,
-        exth: req.body?.exth ? JSON.stringify(req.body.exth) : '',
-        cols: req.body?.cols ? JSON.stringify(req.body.cols) : '',
-        rows: req.body?.rows ? JSON.stringify(req.body.rows) : ''
+        exth: req.body.exth ? JSON.stringify(req.body.exth) : '',
+        cols: req.body.cols ? JSON.stringify(req.body.cols) : '',
+        rows: req.body.rows ? JSON.stringify(req.body.rows) : ''
     });
 
     try {
@@ -69,9 +69,9 @@ module.exports.findByDate = async (req, res) => {
                 svtableId: svtable.svtableId,
                 svtableDate: svtable.svtableDate,
                 name: svtable.name,
-                exth: svtable?.exth ? JSON.parse(svtable.exth) : [],
-                cols: svtable?.cols ? JSON.parse(svtable.cols) : [],
-                rows: svtable?.rows ? JSON.parse(svtable.rows) : []
+                exth: svtable.exth ? JSON.parse(svtable.exth) : [],
+                cols: svtable.cols ? JSON.parse(svtable.cols) : [],
+                rows: svtable.rows ? JSON.parse(svtable.rows) : []
             }
             res.status(200).json(resTable);
         } else {
@@ -90,9 +90,9 @@ module.exports.allOnCurrentDate = async (req, res) => {
                 svtableId: t.svtableId,
                 svtableDate: t.svtableDate,
                 name: t.name ? t.name : '',
-                exth: t?.exth ? JSON.parse(t.exth) : [],
-                cols: t?.cols ? JSON.parse(t.cols) : [],
-                rows: t?.rows ? JSON.parse(t.rows) : []
+                exth: t.exth ? JSON.parse(t.exth) : [],
+                cols: t.cols ? JSON.parse(t.cols) : [],
+                rows: t.rows ? JSON.parse(t.rows) : []
             }))
             res.status(200).json(result)
         } else {
@@ -115,9 +115,9 @@ module.exports.uptateOne = async (req, res) => {
             { svtableId: req.params.svtableId },
             {
                 name: req.body.name,
-                exth: req.body?.exth ? JSON.stringify(req.body.exth) : '',
-                cols: req.body?.cols ? JSON.stringify(req.body.cols) : '',
-                rows: req.body?.rows ? JSON.stringify(req.body.rows) : ''
+                exth: req.body.exth ? JSON.stringify(req.body.exth) : '',
+                cols: req.body.cols ? JSON.stringify(req.body.cols) : '',
+                rows: req.body.rows ? JSON.stringify(req.body.rows) : ''
             },
             { upsert: true }
         );
