@@ -24,6 +24,10 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
     activeTab: number = 0
     currentUser: User
 
+    dayBeforeDate: string = ''
+    dayBeforeSvtables: Svtable[]
+    dayBeforeCurrentSvtable: Svtable
+
     constructor(
         private usersService: UsersService,
         private utilsService: UtilsService,
@@ -42,7 +46,13 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
         this.currentDate = this.utilsService.getCurrentDate()
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
-            this.currentSvtable = svtables.length > 0 ? this.getCurrentSvatableRegionData(svtables[0]) : null
+            this.currentSvtable = svtables.length > 0 ? this.getCurrentSvatableRegionData(svtables[this.activeTab]) : null
+        })
+
+        this.dayBeforeDate = this.utilsService.getDayBefore()
+        this.svtablesService.getOnCurrentDate(this.dayBeforeDate).subscribe((svtables: Svtable[]) => {
+            this.dayBeforeSvtables = svtables
+            this.dayBeforeCurrentSvtable = svtables.length > 0 ? this.getCurrentSvatableRegionData(svtables[this.activeTab]) : null
         })
 
         this.utilsService.setBlockContent(true)
@@ -91,7 +101,21 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
         }
     }
 
+    noLess() {
+        if (this.dayBeforeCurrentSvtable) {
+            this.currentSvtable.cols.forEach((col, i) => {
+                if (col.type === 'value' && this.dayBeforeCurrentSvtable.cols[i].type === 'value') {
+                    this.currentSvtable.rows[0].data[col.idx] =
+                    _.toNumber(this.currentSvtable.rows[0].data[col.idx]) >= _.toNumber(this.dayBeforeCurrentSvtable.rows[0].data[col.idx])
+                        ? this.currentSvtable.rows[0].data[col.idx]
+                        : this.dayBeforeCurrentSvtable.rows[0].data[col.idx]
+                }
+            })
+        }
+    }
+
     onSubmit() {
+        this.noLess()
         this.svtablesService.updateOneRegion(this.currentSvtable.svtableId, this.currentSvtable.rows[0]).subscribe(res => {
             if (res.success === 'true') {
                 this.messageService.add({severity:'success', summary:'Успешно', detail:'Данные сохранены'})

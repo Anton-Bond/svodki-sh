@@ -14,6 +14,7 @@ export class UtilsService {
     blockContentUpdated = new EventEmitter()
 
     private currentDate: string = moment().format('DD-MM-YYYY')
+    private currentDate1 = moment().subtract(7, 'days');
     private blockContent: boolean = false
 
     constructor() { }
@@ -28,6 +29,10 @@ export class UtilsService {
 
     getCurrentDate() {
         return this.currentDate
+    }
+
+    getDayBefore() {
+        return moment(this.currentDate, 'DD-MM-YYYY').subtract(1, 'days').format('DD-MM-YYYY')
     }
 
     getHumCurrentDate() {

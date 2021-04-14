@@ -8,7 +8,7 @@
     [resizableColumns]="true"
     columnResizeMode="expand"
     [(contextMenuSelection)]="selectedCol" [contextMenu]="cm" dataKey="code"
-    [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-300)+'px'}}" frozenWidth="145px"
+    [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-390)+'px'}}" frozenWidth="145px"
 >
     <ng-template pTemplate="caption">
         <span class="p-float-label" [style]="{width: '50%'}">
@@ -76,7 +76,7 @@
                     <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.idx, rowData.data[col.idx])"></i>
                 </span>
                 <input
-                    *ngIf="col.type === 'value' || col.type === 'norm'"
+                    *ngIf="col.type === 'value' || col.type === 'norm'|| col.type === 'perday'"
                     type="text" pInputText
                     [(ngModel)]="rowData.data[col.idx]"
                     class="ui-add-t-input-data p-inputtext-sm"
