@@ -81,7 +81,7 @@ export class EditSvtableComponent implements OnInit {
                 { label: 'Формула', icon: 'pi pi-link', command: () => this.setFormulaCol(this.selectedCol) },
                 { label: 'Процент', icon: 'pi pi-percentage', command: () => this.setPercentageCol(this.selectedCol) },
                 { label: 'Норматив', icon: 'pi pi-book', command: () => this.setNormfCol(this.selectedCol) },
-                // { label: 'За день', icon: 'pi pi-calendar-plus', command: () => this.setPerDayCol(this.selectedCol) }
+                { label: 'За день', icon: 'pi pi-calendar-plus', command: () => this.setPerDayCol(this.selectedCol) }
             ]},
             { separator:true },
             { label: 'Добавить стоблец', icon: 'pi pi-plus', command: () => this.addColumn(this.selectedCol) },
@@ -190,10 +190,11 @@ export class EditSvtableComponent implements OnInit {
         this.selectedCol = 0
     }
 
-    setFormula(idx: number, value: string) {
+    setFormula(type: string, idx: number, value: any) {
 
         const ref = this.dialogService.open(FormulaInputModalComponent, {
             data: {
+                type: type,
                 formula: value
             },
             header: 'Формула столбца: ' + this.utilsService.numberToLetter(idx),
@@ -234,6 +235,7 @@ export class EditSvtableComponent implements OnInit {
     }
 
     cancelChanges() {
+        console.log(this.svtable)
         this.onCancel.emit()
     }
 

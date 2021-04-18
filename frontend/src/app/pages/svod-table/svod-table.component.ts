@@ -34,6 +34,10 @@ export class SvodTableComponent implements OnInit {
     fromDate: Date
     total: any[]
 
+    dayBeforeDate: string = ''
+    dayBeforeSvtables: Svtable[]
+    dayBeforeCurrentSvtable: Svtable
+
     constructor(
         private utilsService: UtilsService,
         private authService: AuthService,
@@ -83,6 +87,12 @@ export class SvodTableComponent implements OnInit {
 
         // TO DO: get value from server
         this.ableEdit = this.authService.isEditable()
+
+        this.dayBeforeDate = this.utilsService.getDayBefore()
+        this.svtablesService.getOnCurrentDate(this.dayBeforeDate).subscribe((svtables: Svtable[]) => {
+            this.dayBeforeSvtables = svtables
+            this.dayBeforeCurrentSvtable = svtables.length > 0 ? svtables[0] : null
+        })
     }
 
     toggleEditable() {
@@ -95,6 +105,7 @@ export class SvodTableComponent implements OnInit {
         if(this.viewMode) {
             this.activeTab = idx
             this.currentSvtable = this.svtables[idx]
+            this.dayBeforeCurrentSvtable = this.dayBeforeSvtables[idx]
         }
     }
 
@@ -145,18 +156,40 @@ export class SvodTableComponent implements OnInit {
         return REGIONS.find(r => r.code === code).name
     }
 
+    getValue(value: string, data: string[]) {
+        const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+            const idx = this.utilsServive.letterToNumber(match)
+            return data[idx] ?  data[idx] : '0'
+        })
+        try {
+            return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
+        } catch {
+            return '?ошибка формулы'
+        }
+
+    }
+
     getCellValue(col: any, data: string[]): any {
         const value = data[col.idx]
         if (col.type === 'formula' || col.type === 'percentage') {
-            const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
-                const idx = this.utilsServive.letterToNumber(match)
-                return data[idx] ?  data[idx] : '0'
-            })
-            try {
-                return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
-            } catch {
-                return '?ошибка формулы'
+            return this.getValue(value, data)
+            // const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+            //     const idx = this.utilsServive.letterToNumber(match)
+            //     return data[idx] ?  data[idx] : '0'
+            // })
+            // try {
+            //     return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
+            // } catch {
+            //     return '?ошибка формулы'
+            // }
+        } else if (col.type === 'perday') {
+            if (this.dayBeforeCurrentSvtable) {
+                const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.data[0] = data[0])
+                const today = this.getValue(value.split('-')[0], data)
+                const yesterday = this.getValue(value.split('-')[1], regData.data)
+                return _.toNumber(today) - _.toNumber(yesterday)
             }
+            return 'нет данных'
         } else {
             return value
         }

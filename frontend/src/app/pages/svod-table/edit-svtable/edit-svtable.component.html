@@ -73,10 +73,31 @@
                         [ngStyle]="{'width': '70%'}"
                     />
                     <label class="ui-add-t-name-body" *ngIf="col.type === 'percentage'"> % </label>
-                    <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.idx, rowData.data[col.idx])"></i>
+                    <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.type, col.idx, rowData.data[col.idx])"></i>
+                </span>
+                <span *ngIf="col.type === 'perday'" class="ui-perday-flex">
+                    <label class="ui-add-t-name-body-small">Сег</label>
+                    <input
+                        pInputText
+                        [disabled]="true"
+                        type="text" pInputText
+                        [(ngModel)]="rowData.data[col.idx].split('-')[0]"
+                        class="p-inputtext-sm"
+                        [ngStyle]="{'width': '20%'}"
+                    />
+                    <label class="ui-add-t-name-body-small" [ngStyle]="{'padding-left': '0.2rem'}"> - вчер</label>
+                    <input
+                        pInputText
+                        [disabled]="true"
+                        type="text" pInputText
+                        [(ngModel)]="rowData.data[col.idx].split('-')[1]"
+                        class="p-inputtext-sm"
+                        [ngStyle]="{'width': '20%'}"
+                    />
+                    <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.type, col.idx, rowData.data[col.idx])"></i>
                 </span>
                 <input
-                    *ngIf="col.type === 'value' || col.type === 'norm'|| col.type === 'perday'"
+                    *ngIf="col.type === 'value' || col.type === 'norm'"
                     type="text" pInputText
                     [(ngModel)]="rowData.data[col.idx]"
                     class="ui-add-t-input-data p-inputtext-sm"

@@ -8,7 +8,10 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog'
   styleUrls: ['./formula-input-modal.component.scss']
 })
 export class FormulaInputModalComponent implements OnInit {
+    type: string = ''
     formula: string = ''
+    today: string = ''
+    yesterday: string = ''
 
     constructor(
         public ref: DynamicDialogRef,
@@ -16,12 +19,18 @@ export class FormulaInputModalComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.formula = this.config.data.formula
+        this.type = this.config.data.type
+        if (this.config.data.type !== 'perday') {
+            this.formula = this.config.data.formula
+        } else {
+            this.today = this.config.data.formula.split('-')[0]
+            this.yesterday = this.config.data.formula.split('-')[1]
+        }
     }
 
     onSave() {
         this.ref.close({
-            formula: this.formula
+            formula: this.config.data.type !== 'perday' ? this.formula : this.today + '-' + this.yesterday
         })
     }
 
