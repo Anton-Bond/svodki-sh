@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { MessageService } from 'primeng/api'
 
 import { AuthService } from '../../services/auth.service'
 import { UsersService } from '../../services/users.service'
@@ -10,7 +11,8 @@ import { ROLE } from '../../shared/constants'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
 
@@ -21,7 +23,8 @@ export class LoginComponent implements OnInit {
         private authService: AuthService,
         private usersService: UsersService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private messageService: MessageService
     ) {}
 
     ngOnInit() {
@@ -59,7 +62,7 @@ export class LoginComponent implements OnInit {
         if (this.form.valid) {
             this.form.disable()
             this.aSub = this.authService.login(this.form.value).subscribe(
-                () => {
+                (res) => {
                     const currentUser = this.authService.getCurrentUser();
                     if (currentUser.role === ROLE.ADMIN) {
                         this.router.navigate([`/sv-admin`])
@@ -68,8 +71,8 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 (error) => {
-                    // this.showMessage(error.error.message)
                     this.form.enable()
+                    this.messageService.add({severity:'error', summary:'Ошибка', detail:'Неверный логин или пароль!'})
                 }
             )
         }

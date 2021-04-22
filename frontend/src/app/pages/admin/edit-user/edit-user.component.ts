@@ -5,6 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
+import { MessageService } from 'primeng/api'
 
 import { User } from '../../../shared/interfaces';
 import { UsersService } from '../../../services/users.service';
@@ -13,7 +14,8 @@ import { ROLES, ROLE, REGIONS } from '../../../shared/constants';
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.scss']
+  styleUrls: ['./edit-user.component.scss'],
+  providers: [MessageService]
 })
 export class EditUserComponent implements OnInit {
     isLoaded: boolean = false
@@ -30,7 +32,8 @@ export class EditUserComponent implements OnInit {
         private usersService: UsersService,
         private router: Router,
         public ref: DynamicDialogRef,
-        public config: DynamicDialogConfig
+        public config: DynamicDialogConfig,
+        private messageService: MessageService
     ) {}
 
     ngOnInit() {
@@ -68,35 +71,8 @@ export class EditUserComponent implements OnInit {
                     this.isLoaded = true
                     this.noeditable = user.role === ROLE.REGION || user.email === 'admin@test.by'
                 },
-                (error) => alert(error.error.message)
+                (error) => this.messageService.add({ severity:'error', detail: error.error.message })
             )
-
-        // this.route.params
-        //     .pipe(
-        //         switchMap((params: Params) => {
-        //             if (params['userId']) {
-        //                 return this.usersService.getById(params['userId'])
-        //             }
-        //             return of(null)
-        //         })
-        //     )
-        //     .subscribe(
-        //         (user: User) => {
-        //             if (user) {
-        //                 this.userName = user.name
-        //                 this.user = user
-        //                 this.form.patchValue({
-        //                     name: user.name,
-        //                     email: user.email,
-        //                     role: user.role,
-        //                 })
-        //             }
-
-        //             this.form.enable()
-        //             this.isLoaded = true
-        //         },
-        //         (error) => alert(error.error.message)
-        //     )
     }
 
     // remove product from DB
@@ -121,7 +97,7 @@ export class EditUserComponent implements OnInit {
             },
             (e) => {
                 console.log('error >>', e)
-                alert('Something went wrong!');
+                this.messageService.add({ severity:'error', detail: 'Что-то пошло не так!' })
             }
             )
         // this.usersService
@@ -145,7 +121,7 @@ export class EditUserComponent implements OnInit {
             },
             (e) => {
                 console.log('error >>', e)
-                alert('Something went wrong!');
+                this.messageService.add({ severity:'error', detail: 'Что-то пошло не так!' })
             }
             )
     }

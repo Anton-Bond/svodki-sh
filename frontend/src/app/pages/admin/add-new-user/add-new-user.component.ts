@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { DynamicDialogRef } from 'primeng/dynamicdialog'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
+import { MessageService } from 'primeng/api'
 
 import { UsersService } from '../../../services/users.service';
 import { ROLES, REGIONS, ROLE } from '../../../shared/constants';
@@ -9,7 +10,8 @@ import { ROLES, REGIONS, ROLE } from '../../../shared/constants';
 @Component({
     selector: 'app-add-new-user',
     templateUrl: './add-new-user.component.html',
-    styleUrls: ['./add-new-user.component.scss']
+    styleUrls: ['./add-new-user.component.scss'],
+    providers: [MessageService]
 })
 export class AddNewUserComponent implements OnInit {
     form: FormGroup
@@ -20,7 +22,8 @@ export class AddNewUserComponent implements OnInit {
     constructor(
         private usersService: UsersService,
         public ref: DynamicDialogRef,
-        public config: DynamicDialogConfig
+        public config: DynamicDialogConfig,
+        private messageService: MessageService
     ) { }
 
     ngOnInit(): void {
@@ -42,7 +45,7 @@ export class AddNewUserComponent implements OnInit {
                 message: user ? 'Новый пользователь был успешно добавлен' : 'Что-то пошло не так!'
             });
         },
-            (e) => alert(e.error.message)
+            (e) => this.messageService.add({ severity:'error', detail: e.error.message })
         )
 
         this.form.enable();

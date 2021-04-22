@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { DialogService } from 'primeng/dynamicdialog'
+import { MessageService } from 'primeng/api'
 
 import { UsersService } from '../../../services/users.service'
 import { User } from '../../../shared/interfaces'
@@ -14,7 +15,7 @@ import { AddNewUserComponent } from '../add-new-user/add-new-user.component'
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
-  providers: [DialogService]
+  providers: [DialogService, MessageService]
 })
 export class UsersComponent implements OnInit {
     isLoaded = false
@@ -24,7 +25,8 @@ export class UsersComponent implements OnInit {
     constructor(
         private dialogService: DialogService,
         private usersService: UsersService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private messageService: MessageService
     ) {}
 
     ngOnInit() {
@@ -58,7 +60,7 @@ export class UsersComponent implements OnInit {
 
         ref.onClose.subscribe(payload => {
             if (payload) {
-                alert(payload.message)
+                this.messageService.add({ severity:'success', detail: payload.message })
             }
             this.fetchUsers()
         });
@@ -75,20 +77,20 @@ export class UsersComponent implements OnInit {
 
         ref.onClose.subscribe(payload => {
             if (payload) {
-                alert(payload.message)
+                this.messageService.add({ severity:'success', detail: payload.message })
             }
         });
     }
 
     addNew() {
         const ref = this.dialogService.open(AddNewUserComponent, {
-            header: 'Создание нового пользователя',
+            header: 'Регистрация нового пользователя',
             width: '40%'
         })
 
         ref.onClose.subscribe(payload => {
             if (payload) {
-                alert(payload.message)
+                this.messageService.add({ severity:'success', detail: payload.message })
             }
             this.fetchUsers()
         });

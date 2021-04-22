@@ -75,14 +75,15 @@ export class SvodTableComponent implements OnInit {
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
-            this.total = this.currentSvtable.cols.map(col => {
-                if (col.type === 'percentage') {
-                    return this.currentSvtable.rows[0].data[col.idx]
-                } else {
-                    return this.getColTotal(col)
-                }
-            })
-            this.total.unshift('Всего:')
+            this.total = this.getTotal(this.currentSvtable)
+            // this.total = this.currentSvtable.cols.map(col => {
+            //     if (col.type === 'percentage') {
+            //         return this.currentSvtable.rows[0].data[col.idx]
+            //     } else {
+            //         return this.getColTotal(col)
+            //     }
+            // })
+            // this.total.unshift('Всего:')
         })
 
         // TO DO: get value from server
@@ -93,6 +94,18 @@ export class SvodTableComponent implements OnInit {
             this.dayBeforeSvtables = svtables
             this.dayBeforeCurrentSvtable = svtables.length > 0 ? svtables[0] : null
         })
+    }
+
+    getTotal(currentSvtable): any[] {
+        const total = currentSvtable.cols.map(col => {
+            if (col.type === 'percentage') {
+                return currentSvtable.rows[0].data[col.idx]
+            } else {
+                return this.getColTotal(col)
+            }
+        })
+        total.unshift('Всего:')
+        return total
     }
 
     toggleEditable() {
@@ -106,6 +119,7 @@ export class SvodTableComponent implements OnInit {
             this.activeTab = idx
             this.currentSvtable = this.svtables[idx]
             this.dayBeforeCurrentSvtable = this.dayBeforeSvtables[idx]
+            this.total = this.getTotal(this.svtables[idx])
         }
     }
 

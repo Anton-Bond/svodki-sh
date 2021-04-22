@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { DynamicDialogRef } from 'primeng/dynamicdialog'
 import { DynamicDialogConfig } from 'primeng/dynamicdialog'
-import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { MessageService } from 'primeng/api'
 
 import { UsersService } from '../../../services/users.service';
 
 @Component({
   selector: 'app-edit-pass-user',
   templateUrl: './edit-pass-user.component.html',
-  styleUrls: ['./edit-pass-user.component.scss']
+  styleUrls: ['./edit-pass-user.component.scss'],
+  providers: [MessageService]
 })
 export class EditPassUserComponent implements OnInit {
     form: FormGroup
@@ -19,7 +19,8 @@ export class EditPassUserComponent implements OnInit {
     constructor(
         private usersService: UsersService,
         public ref: DynamicDialogRef,
-        public config: DynamicDialogConfig
+        public config: DynamicDialogConfig,
+        private messageService: MessageService
     ) { }
 
     ngOnInit(): void {
@@ -49,7 +50,7 @@ export class EditPassUserComponent implements OnInit {
                 },
                 (e) => {
                     console.log('error >>', e)
-                    alert('Something went wrong!');
+                    this.messageService.add({ severity:'error', detail: 'Что-то пошло не так!' })
                 }
             )
         this.form.enable()
