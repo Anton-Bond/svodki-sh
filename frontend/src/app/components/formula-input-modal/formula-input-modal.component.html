@@ -1,10 +1,40 @@
-<div>
+<div *ngIf="type !== 'perday'">
     <label>f = </label>
     <input
         pInputText
         type="text"
         [(ngModel)]="formula"
         class="p-inputtext-sm ui-formula-modal"
+    />
+    <button
+        pButton
+        type="button"
+        icon="pi pi-check"
+        class="p-button-rounded p-button-sm"
+        style="margin-left: 1rem;"
+        (click)="onSave()"
+    ></button>
+</div>
+
+<div *ngIf="type === 'perday'">
+    <div>
+        <p>Введите адреса(буквенные) строк</p>
+    </div>
+    <label>Сег.</label>
+    <input
+        pInputText
+        type="text"
+        [(ngModel)]="today"
+        class="p-inputtext-sm ui-formula-modal"
+        [ngStyle]="{'width': '30%'}"
+    />
+    <label class="ui-formula-modal-padding-left">- вчер.</label>
+    <input
+        pInputText
+        type="text"
+        [(ngModel)]="yesterday"
+        class="p-inputtext-sm ui-formula-modal"
+        [ngStyle]="{'width': '30%'}"
     />
     <button
         pButton

@@ -7,6 +7,10 @@
     .p-datatable-scrollable-view.p-datatable-frozen-view .p-datatable-scrollable-header-table .ng-star-inserted .ng-star-inserted:first-child .zx {
         display: none;
     }
+
+    .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+        padding: 0.1rem;
+    }
 }
 
 .ui-tadd-btngroup {
@@ -30,8 +34,12 @@
     padding: 0 !important;
 }
 
+.ui-col-idx:hover {
+    background-color: lightblue;
+}
+
 .ui-col-idx>p {
-    font-size: 10px;
+    // font-size: 10px;
     padding: .2rem !important;
     margin: 0 !important;
 }
@@ -62,4 +70,15 @@
 
 .ui-edit-formul:hover {
     color: #ff0000;
+}
+
+.ui-add-t-name-body-small {
+    font-size: small;
+}
+
+.ui-perday-flex {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    padding-left: 0;
 }

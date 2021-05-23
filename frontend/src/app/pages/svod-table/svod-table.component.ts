@@ -34,6 +34,9 @@ export class SvodTableComponent implements OnInit {
     fromDate: Date
     total: any[]
 
+    dayBeforeSvtables: any[]
+    dayBeforeCurrentSvtable: any
+
     constructor(
         private utilsService: UtilsService,
         private authService: AuthService,
@@ -71,18 +74,29 @@ export class SvodTableComponent implements OnInit {
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
-            this.total = this.currentSvtable.cols.map(col => {
-                if (col.type === 'percentage') {
-                    return this.currentSvtable.rows[0].data[col.idx]
-                } else {
-                    return this.getColTotal(col)
-                }
+
+            this.svtablesService.getPerDayTables(this.currentDate).subscribe((tables: any[]) => {
+                this.dayBeforeSvtables = tables
+                this.dayBeforeCurrentSvtable = tables.find(t => t.svtableId === this.currentSvtable.svtableId)
+
+                this.total = this.getTotal(this.currentSvtable)
             })
-            this.total.unshift('Всего:')
         })
 
         // TO DO: get value from server
         this.ableEdit = this.authService.isEditable()
+    }
+
+    getTotal(currentSvtable): any[] {
+        const total = currentSvtable.cols.map(col => {
+            if (col.type === 'percentage') {
+                return currentSvtable.rows[0].data[col.idx]
+            } else {
+                return this.getColTotal(col)
+            }
+        })
+        total.unshift('Всего:')
+        return total
     }
 
     toggleEditable() {
@@ -95,6 +109,8 @@ export class SvodTableComponent implements OnInit {
         if(this.viewMode) {
             this.activeTab = idx
             this.currentSvtable = this.svtables[idx]
+            this.dayBeforeCurrentSvtable = this.dayBeforeSvtables.find(t => t.svtableId === this.currentSvtable.svtableId)
+            this.total = this.getTotal(this.svtables[idx])
         }
     }
 
@@ -145,18 +161,44 @@ export class SvodTableComponent implements OnInit {
         return REGIONS.find(r => r.code === code).name
     }
 
+    getValue(value: string, data: string[]) {
+        const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+            const index = this.utilsServive.letterToNumber(match)
+            const reg = new RegExp('^[A-Za-z]')
+            const reg2 = new RegExp('-')
+            if (reg2.test(data[index])) {
+                console.log(index)
+                return this.getPerDay(index, data[index], data)
+            }
+            if (reg.test(data[index])) {
+                return this.getValue(data[index], data)
+            }
+            return data[index] ?  data[index] : '0'
+        })
+        try {
+            return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
+        } catch {
+            return 'ошибка формулы'
+        }
+
+    }
+
+    getPerDay(idx: number, value: string, data: string[]) {
+        if (this.dayBeforeCurrentSvtable) {
+            const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.reg === data[0])
+            const today = this.getValue(value.split('-')[0], data)
+            const yesterday = regData[idx]
+            return _.toNumber(today) - _.toNumber(yesterday)
+        }
+        return 0
+    }
+
     getCellValue(col: any, data: string[]): any {
         const value = data[col.idx]
         if (col.type === 'formula' || col.type === 'percentage') {
-            const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
-                const idx = this.utilsServive.letterToNumber(match)
-                return data[idx] ?  data[idx] : '0'
-            })
-            try {
-                return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
-            } catch {
-                return '?ошибка формулы'
-            }
+            return this.getValue(value, data)
+        } else if (col.type === 'perday') {
+            return this.getPerDay(col.idx, value, data)
         } else {
             return value
         }

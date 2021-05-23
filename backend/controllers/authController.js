@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const keys = require('../config/keys')
+require('dotenv').config()
 
 const User = require('../models/user.model')
 
@@ -27,7 +27,7 @@ module.exports.login = async (req, res) => {
                     email: candidate.email,
                     role: candidate.role,
                 },
-                keys.jwt,
+                process.env.JWT,
                 { expiresIn: 60 * 60 }
             )
 

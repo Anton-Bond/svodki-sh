@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
+import * as _ from 'lodash'
 
 import { Svtable } from '../shared/interfaces'
 import { DB } from '../shared/conf'
@@ -18,6 +19,10 @@ export class SvtablesService {
 
     getOnCurrentDate(currentDate: string): Observable<Svtable[]> {
         return this.http.get<Svtable[]>(`${DB.url}/api/sv-table/on-current-date/${currentDate}`)
+    }
+
+    getPerDayTables(date: string): Observable<any[]> {
+        return this.http.get<any[]>(`${DB.url}/api/sv-table/on-daybefore-date/${date}`)
     }
 
     create(svtable: Svtable) {

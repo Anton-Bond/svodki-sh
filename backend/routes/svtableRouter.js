@@ -4,6 +4,8 @@ const router = express.Router()
 
 router.get('/on-current-date/:currentDate', controller.allOnCurrentDate)
 
+router.get('/on-daybefore-date/:date', controller.getPreviosPerdayTables)
+
 router.post('/new', controller.create)
 
 router.post('/addNewSvatebles', controller.addNewSvatebles)
