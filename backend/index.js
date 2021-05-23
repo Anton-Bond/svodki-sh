@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
+const cron = require('node-cron')
 
 const app = require('./app')
+const saveToPerdayTablesEveryDay = require('./utils/saveToPerdayTablesEveryDay')
+
 const port = process.env.PORT || 3838
 
 const start = async () => {
@@ -21,3 +24,7 @@ const start = async () => {
 }
 
 start()
+
+cron.schedule('20 02 * * *', () => {
+    saveToPerdayTablesEveryDay()
+})

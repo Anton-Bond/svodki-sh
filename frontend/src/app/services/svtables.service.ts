@@ -21,6 +21,10 @@ export class SvtablesService {
         return this.http.get<Svtable[]>(`${DB.url}/api/sv-table/on-current-date/${currentDate}`)
     }
 
+    getPerDayTables(date: string): Observable<any[]> {
+        return this.http.get<any[]>(`${DB.url}/api/sv-table/on-daybefore-date/${date}`)
+    }
+
     create(svtable: Svtable) {
         return this.http.post<Svtable>(
             `${DB.url}/api/sv-table/new`,

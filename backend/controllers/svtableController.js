@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid')
 
 const Svtable = require('../models/svtable.model')
 const CurrentDate = require('../models/currentDate.model')
+const PerdayTable = require('../models/perdayTable.model')
 
 module.exports.create = async function (req, res) {
     if (!req.body) {
@@ -100,6 +101,24 @@ module.exports.allOnCurrentDate = async (req, res) => {
         }
     } catch (e) {
         res.status(404).send(e.message || 'Some error occurred while receiving svod table.')
+    }
+};
+
+module.exports.getPreviosPerdayTables = async (req, res) => {
+    try {
+        const tables = await PerdayTable.find({ date: req.params.date })
+        if (tables) {
+            const result = tables.map(t => ({
+                svtableId: t.svtableId,
+                date: t.date,
+                rows: t.rows ? JSON.parse(t.rows) : []
+            }))
+            res.status(200).json(result)
+        } else {
+            res.status(404).json({message: 'Perday tables not found'})
+        }
+    } catch (e) {
+        res.status(404).send(e.message || 'Some error occurred while receiving perday table.')
     }
 };
 
