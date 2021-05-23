@@ -29,9 +29,13 @@ export class FormulaInputModalComponent implements OnInit {
     }
 
     onSave() {
-        this.ref.close({
-            formula: this.config.data.type !== 'perday' ? this.formula : this.today + '-' + this.yesterday
-        })
+        const reg = new RegExp('^[0-9]')
+        if (reg.test(this.formula)) {
+            alert('Формула не должна начинаться с числа!')
+        } else {
+            this.ref.close({
+                formula: this.config.data.type !== 'perday' ? this.formula : this.today + '-' + this.yesterday
+            })
+        }
     }
-
 }

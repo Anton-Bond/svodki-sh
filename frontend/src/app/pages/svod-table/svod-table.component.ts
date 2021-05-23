@@ -164,10 +164,9 @@ export class SvodTableComponent implements OnInit {
     getValue(value: string, data: string[]) {
         const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
             const index = this.utilsServive.letterToNumber(match)
-            const reg = new RegExp('^[A-Za-z]')
+            const reg = new RegExp('^[A-Za-z(]')
             const reg2 = new RegExp('-')
             if (reg2.test(data[index])) {
-                console.log(index)
                 return this.getPerDay(index, data[index], data)
             }
             if (reg.test(data[index])) {
@@ -176,9 +175,10 @@ export class SvodTableComponent implements OnInit {
             return data[index] ?  data[index] : '0'
         })
         try {
+            if (eval(cod) === Infinity) { return 'Дел_На_Ноль' }
             return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
         } catch {
-            return 'ошибка формулы'
+            return 'Ошиб_Формулы'
         }
 
     }

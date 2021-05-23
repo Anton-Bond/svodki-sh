@@ -63,16 +63,16 @@
         <tr>
             <td *ngFor="let col of columns">
                 <span *ngIf="col.type === 'formula' || col.type === 'percentage'">
-                    <label class="ui-add-t-name-body">f = </label>
+                    <label class="ui-add-t-name-body" *ngIf="col.type === 'formula'">f = </label>
+                    <label class="ui-add-t-name-body" *ngIf="col.type === 'percentage'">% = </label>
                     <input
                         pInputText
                         [disabled]="true"
                         type="text" pInputText
                         [(ngModel)]="rowData.data[col.idx]"
                         class="p-inputtext-sm"
-                        [ngStyle]="{'width': '70%'}"
+                        [ngStyle]="{'width': '65%'}"
                     />
-                    <label class="ui-add-t-name-body" *ngIf="col.type === 'percentage'"> % </label>
                     <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.type, col.idx, rowData.data[col.idx])"></i>
                 </span>
                 <span *ngIf="col.type === 'perday'" class="ui-perday-flex">
