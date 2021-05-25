@@ -165,7 +165,7 @@ export class SvodTableComponent implements OnInit {
         const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
             const index = this.utilsServive.letterToNumber(match)
             const reg = new RegExp('^[A-Za-z(]')
-            const reg2 = new RegExp('-')
+            const reg2 = new RegExp(':')
             if (reg2.test(data[index])) {
                 return this.getPerDay(index, data[index], data)
             }
@@ -186,7 +186,7 @@ export class SvodTableComponent implements OnInit {
     getPerDay(idx: number, value: string, data: string[]) {
         if (this.dayBeforeCurrentSvtable) {
             const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.reg === data[0])
-            const today = this.getValue(value.split('-')[0], data)
+            const today = this.getValue(value.split(':')[0], data)
             const yesterday = regData[idx]
             return _.toNumber(today) - _.toNumber(yesterday)
         }

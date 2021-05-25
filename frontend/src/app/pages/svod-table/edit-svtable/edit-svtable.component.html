@@ -81,7 +81,7 @@
                         pInputText
                         [disabled]="true"
                         type="text" pInputText
-                        [(ngModel)]="rowData.data[col.idx].split('-')[0]"
+                        [(ngModel)]="rowData.data[col.idx].split(':')[0]"
                         class="p-inputtext-sm"
                         [ngStyle]="{'width': '20%'}"
                     />
@@ -90,7 +90,7 @@
                         pInputText
                         [disabled]="true"
                         type="text" pInputText
-                        [(ngModel)]="rowData.data[col.idx].split('-')[1]"
+                        [(ngModel)]="rowData.data[col.idx].split(':')[1]"
                         class="p-inputtext-sm"
                         [ngStyle]="{'width': '20%'}"
                     />

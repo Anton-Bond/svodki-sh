@@ -23,8 +23,8 @@ export class FormulaInputModalComponent implements OnInit {
         if (this.config.data.type !== 'perday') {
             this.formula = this.config.data.formula
         } else {
-            this.today = this.config.data.formula.split('-')[0]
-            this.yesterday = this.config.data.formula.split('-')[1]
+            this.today = this.config.data.formula.split(':')[0]
+            this.yesterday = this.config.data.formula.split(':')[1]
         }
     }
 
@@ -34,7 +34,7 @@ export class FormulaInputModalComponent implements OnInit {
             alert('Формула не должна начинаться с числа!')
         } else {
             this.ref.close({
-                formula: this.config.data.type !== 'perday' ? this.formula : this.today + '-' + this.yesterday
+                formula: this.config.data.type !== 'perday' ? this.formula : this.today + ':' + this.yesterday
             })
         }
     }
