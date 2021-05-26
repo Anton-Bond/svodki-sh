@@ -32,7 +32,9 @@ const getValue = (value, data) => {
 
 const getCellValue = (prevTable, col, data) => {
     const value = data[col.idx]
-    if (col.type === 'perday') {
+    if (col.type === 'formula' || col.type === 'percentage') {
+        return this.getValue(value, data)
+    } else if (col.type === 'perday') {
         if (prevTable) {
             const regData = prevTable.rows.find(row => row.data[0] === data[0])
             const today = getValue(value.split('-')[0], data)
@@ -40,8 +42,19 @@ const getCellValue = (prevTable, col, data) => {
             return _.toNumber(today) - _.toNumber(yesterday)
         }
         return 0
+    } else {
+        return value
     }
-    return null
+    // if (col.type === 'perday') {
+    //     if (prevTable) {
+    //         const regData = prevTable.rows.find(row => row.data[0] === data[0])
+    //         const today = getValue(value.split('-')[0], data)
+    //         const yesterday = getValue(value.split('-')[1], regData.data)
+    //         return _.toNumber(today) - _.toNumber(yesterday)
+    //     }
+    //     return 0
+    // }
+    // return null
 }
 
 module.exports = async () => {
@@ -67,10 +80,11 @@ module.exports = async () => {
                 rows.forEach(row => {
                     const newRow = { reg: row.data[0]}
                     cols.forEach(col => {
-                        const value = getCellValue(prevTable, col, row.data)
-                        if (value !== null) {
-                            newRow[col.idx] = value
-                        }
+                        newRow[col.idx] = getCellValue(prevTable, col, row.data)
+                        // const value = getCellValue(prevTable, col, row.data)
+                        // if (value !== null) {
+                            // newRow[col.idx] = value
+                        // }
                     })
                     newRows.push(newRow)
                 })
