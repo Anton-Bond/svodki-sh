@@ -11,6 +11,11 @@
     [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-390)+'px'}}" frozenWidth="145px"
 >
     <ng-template pTemplate="caption">
+        <span class="p-float-label" [style]="{width: '5%'}">
+            <input id="uiloat-input" type="text" pInputText [(ngModel)]="svtable.svtableId" [style]="{width: '80%'}" />
+            <label for="uiloat-input">Номер таблицы</label>
+        </span>
+
         <span class="p-float-label" [style]="{width: '50%'}">
             <input id="uiloat-input" type="text" pInputText [(ngModel)]="svtable.name" [style]="{width: '100%'}" />
             <label for="uiloat-input">Название таблицы</label>
@@ -63,16 +68,16 @@
         <tr>
             <td *ngFor="let col of columns">
                 <span *ngIf="col.type === 'formula' || col.type === 'percentage'">
-                    <label class="ui-add-t-name-body">f = </label>
+                    <label class="ui-add-t-name-body" *ngIf="col.type === 'formula'">f = </label>
+                    <label class="ui-add-t-name-body" *ngIf="col.type === 'percentage'">% = </label>
                     <input
                         pInputText
                         [disabled]="true"
                         type="text" pInputText
                         [(ngModel)]="rowData.data[col.idx]"
                         class="p-inputtext-sm"
-                        [ngStyle]="{'width': '70%'}"
+                        [ngStyle]="{'width': '65%'}"
                     />
-                    <label class="ui-add-t-name-body" *ngIf="col.type === 'percentage'"> % </label>
                     <i class="pi pi-pencil ui-edit-formul" (click)="setFormula(col.type, col.idx, rowData.data[col.idx])"></i>
                 </span>
                 <span *ngIf="col.type === 'perday'" class="ui-perday-flex">
@@ -81,7 +86,7 @@
                         pInputText
                         [disabled]="true"
                         type="text" pInputText
-                        [(ngModel)]="rowData.data[col.idx].split('-')[0]"
+                        [(ngModel)]="rowData.data[col.idx].split(':')[0]"
                         class="p-inputtext-sm"
                         [ngStyle]="{'width': '20%'}"
                     />
@@ -90,7 +95,7 @@
                         pInputText
                         [disabled]="true"
                         type="text" pInputText
-                        [(ngModel)]="rowData.data[col.idx].split('-')[1]"
+                        [(ngModel)]="rowData.data[col.idx].split(':')[1]"
                         class="p-inputtext-sm"
                         [ngStyle]="{'width': '20%'}"
                     />

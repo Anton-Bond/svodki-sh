@@ -34,6 +34,7 @@ export class SvodTableComponent implements OnInit {
     fromDate: Date
     total: any[]
 
+    dayBeforeDate: string = ''
     dayBeforeSvtables: any[]
     dayBeforeCurrentSvtable: any
 
@@ -71,11 +72,13 @@ export class SvodTableComponent implements OnInit {
 
     initData() {
         this.currentDate = this.utilsService.getCurrentDate()
+        this.dayBeforeDate = this.utilsService.getDayBefore()
+
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
 
-            this.svtablesService.getPerDayTables(this.currentDate).subscribe((tables: any[]) => {
+            this.svtablesService.getPerDayTables(this.dayBeforeDate).subscribe((tables: any[]) => {
                 this.dayBeforeSvtables = tables
                 this.dayBeforeCurrentSvtable = tables.find(t => t.svtableId === this.currentSvtable.svtableId)
 
@@ -164,10 +167,9 @@ export class SvodTableComponent implements OnInit {
     getValue(value: string, data: string[]) {
         const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
             const index = this.utilsServive.letterToNumber(match)
-            const reg = new RegExp('^[A-Za-z]')
-            const reg2 = new RegExp('-')
+            const reg = new RegExp('^[A-Za-z(]')
+            const reg2 = new RegExp(':')
             if (reg2.test(data[index])) {
-                console.log(index)
                 return this.getPerDay(index, data[index], data)
             }
             if (reg.test(data[index])) {
@@ -176,9 +178,10 @@ export class SvodTableComponent implements OnInit {
             return data[index] ?  data[index] : '0'
         })
         try {
+            if (eval(cod) === Infinity) { return 'Дел_На_Ноль' }
             return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
         } catch {
-            return 'ошибка формулы'
+            return 'Ошиб_Формулы'
         }
 
     }
@@ -186,7 +189,7 @@ export class SvodTableComponent implements OnInit {
     getPerDay(idx: number, value: string, data: string[]) {
         if (this.dayBeforeCurrentSvtable) {
             const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.reg === data[0])
-            const today = this.getValue(value.split('-')[0], data)
+            const today = this.getValue(value.split(':')[0], data)
             const yesterday = regData[idx]
             return _.toNumber(today) - _.toNumber(yesterday)
         }

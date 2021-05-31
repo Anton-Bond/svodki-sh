@@ -23,15 +23,19 @@ export class FormulaInputModalComponent implements OnInit {
         if (this.config.data.type !== 'perday') {
             this.formula = this.config.data.formula
         } else {
-            this.today = this.config.data.formula.split('-')[0]
-            this.yesterday = this.config.data.formula.split('-')[1]
+            this.today = this.config.data.formula.split(':')[0]
+            this.yesterday = this.config.data.formula.split(':')[1]
         }
     }
 
     onSave() {
-        this.ref.close({
-            formula: this.config.data.type !== 'perday' ? this.formula : this.today + '-' + this.yesterday
-        })
+        const reg = new RegExp('^[0-9]')
+        if (reg.test(this.formula)) {
+            alert('Формула не должна начинаться с числа!')
+        } else {
+            this.ref.close({
+                formula: this.config.data.type !== 'perday' ? this.formula : this.today + ':' + this.yesterday
+            })
+        }
     }
-
 }
