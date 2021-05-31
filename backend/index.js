@@ -25,6 +25,6 @@ const start = async () => {
 
 start()
 
-cron.schedule('20 02 * * *', () => {
+cron.schedule('00 23 * * *', () => {
     saveToPerdayTablesEveryDay()
 })

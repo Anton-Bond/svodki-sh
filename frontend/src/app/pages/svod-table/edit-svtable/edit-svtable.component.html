@@ -11,6 +11,11 @@
     [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="{{(screenHeight-390)+'px'}}" frozenWidth="145px"
 >
     <ng-template pTemplate="caption">
+        <span class="p-float-label" [style]="{width: '5%'}">
+            <input id="uiloat-input" type="text" pInputText [(ngModel)]="svtable.svtableId" [style]="{width: '80%'}" />
+            <label for="uiloat-input">Номер таблицы</label>
+        </span>
+
         <span class="p-float-label" [style]="{width: '50%'}">
             <input id="uiloat-input" type="text" pInputText [(ngModel)]="svtable.name" [style]="{width: '100%'}" />
             <label for="uiloat-input">Название таблицы</label>

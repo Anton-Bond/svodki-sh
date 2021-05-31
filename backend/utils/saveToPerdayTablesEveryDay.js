@@ -17,11 +17,31 @@ const letterToNumber = (str) => {
     return res
 }
 
-const getValue = (value, data) => {
+const getPerDay = (prevRows, idx, value, data) => {
+    if (prevRows) {
+        const regData = prevRows.find(row => row.reg === data[0])
+        const today = getValue(value.split(':')[0], data, prevRows)
+        const yesterday = regData[idx]
+        return _.toNumber(today) - _.toNumber(yesterday)
+    }
+    return 0
+}
+
+const getValue = (value, data, prevRows) => {
     try {
         const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
             const index = letterToNumber(match)
-            return data[index] ?  data[index] : null
+
+            const reg = new RegExp('^[A-Za-z(]')
+            const reg2 = new RegExp(':')
+            if (reg2.test(data[index])) {
+                return getPerDay(prevRows, index, data[index], data)
+            }
+            if (reg.test(data[index])) {
+                return getValue(data[index], data, prevRows)
+            }
+
+            return data[index] ? data[index] : null
         })
         return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : null
     } catch {
@@ -30,31 +50,15 @@ const getValue = (value, data) => {
 
 }
 
-const getCellValue = (prevTable, col, data) => {
+const getCellValue = (prevRows, col, data) => {
     const value = data[col.idx]
     if (col.type === 'formula' || col.type === 'percentage') {
-        return this.getValue(value, data)
+        return getValue(value, data, prevRows)
     } else if (col.type === 'perday') {
-        if (prevTable) {
-            const regData = prevTable.rows.find(row => row.data[0] === data[0])
-            const today = getValue(value.split('-')[0], data)
-            const yesterday = getValue(value.split('-')[1], regData.data)
-            return _.toNumber(today) - _.toNumber(yesterday)
-        }
-        return 0
+        return getPerDay(prevRows, col.idx, value, data)
     } else {
         return value
     }
-    // if (col.type === 'perday') {
-    //     if (prevTable) {
-    //         const regData = prevTable.rows.find(row => row.data[0] === data[0])
-    //         const today = getValue(value.split('-')[0], data)
-    //         const yesterday = getValue(value.split('-')[1], regData.data)
-    //         return _.toNumber(today) - _.toNumber(yesterday)
-    //     }
-    //     return 0
-    // }
-    // return null
 }
 
 module.exports = async () => {
@@ -64,7 +68,7 @@ module.exports = async () => {
         const prevDate = moment(curDate, 'DD-MM-YYYY').subtract(1, 'days').format('DD-MM-YYYY')
 
         const curTables = await Svtable.find({ svtableDate: curDate })
-        const prevTables = await Svtable.find({ svtableDate: prevDate })
+        const prevTables = await PerdayTable.find({ date: prevDate })
 
         if (curTables.length > 0) {
             curTables.forEach((t, i) => {
@@ -72,22 +76,22 @@ module.exports = async () => {
                 const cols = t.cols ? JSON.parse(t.cols) : []
                 const rows = t.rows ? JSON.parse(t.rows) : []
 
-                const prevTable = {
-                    cols: prevTables[i].cols ? JSON.parse(t.cols) : [],
-                    rows: prevTables[i].rows ? JSON.parse(t.rows) : []
-                }
-
-                rows.forEach(row => {
-                    const newRow = { reg: row.data[0]}
-                    cols.forEach(col => {
-                        newRow[col.idx] = getCellValue(prevTable, col, row.data)
-                        // const value = getCellValue(prevTable, col, row.data)
-                        // if (value !== null) {
-                            // newRow[col.idx] = value
-                        // }
+                try {
+                    const prevTable = prevTables.find(i => i.svtableId === t.svtableId)
+                    const prevRows = prevTable.rows ? JSON.parse(prevTable.rows) : []
+    
+                    rows.forEach(row => {
+                        const newRow = { reg: row.data[0]}
+                        cols.forEach(col => {
+                            newRow[col.idx] = getCellValue(prevRows, col, row.data)
+                        })
+                        console.log(' [log] newRow: ', newRow)
+                        newRows.push(newRow)
                     })
-                    newRows.push(newRow)
-                })
+                } catch (err) {
+                    newRows.push({})
+                    console.log(' [e] error while add to newRows')
+                }
 
                 resTables.push({
                     svtableId: t.svtableId,

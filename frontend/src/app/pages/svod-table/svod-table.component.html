@@ -8,7 +8,7 @@
                 [ngStyle]="{'color': activeTab === i ? '#015fc2f0' : 'inherit', 'border-bottom':  activeTab === i ? '2px solid #015fc2f0' : '2px solid #c9c9c9'}"
                 (click)="toggleTab(i)"
             >
-                {{tab.name ? (tab.name  | slice:0:15) + '...' : 'Без названия' }}
+                {{tab.svtableId}}.{{tab.name ? (tab.name  | slice:0:15) + '...' : 'Без названия' }}
             </li>
             <li
                 *ngIf="ableEdit"
@@ -41,7 +41,7 @@
             <ng-template pTemplate="caption">
                 <div class="p-d-flex p-ai-center p-jc-between">
                     <div>
-                        <p class="ui-nopadding">{{currentSvtable.name}}</p>
+                        <p class="ui-nopadding">{{currentSvtable.svtableId}}.{{currentSvtable.name}}</p>
                     </div>
                     <div>
                         <button

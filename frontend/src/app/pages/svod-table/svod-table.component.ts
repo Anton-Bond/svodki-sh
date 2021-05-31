@@ -34,6 +34,7 @@ export class SvodTableComponent implements OnInit {
     fromDate: Date
     total: any[]
 
+    dayBeforeDate: string = ''
     dayBeforeSvtables: any[]
     dayBeforeCurrentSvtable: any
 
@@ -71,11 +72,13 @@ export class SvodTableComponent implements OnInit {
 
     initData() {
         this.currentDate = this.utilsService.getCurrentDate()
+        this.dayBeforeDate = this.utilsService.getDayBefore()
+
         this.svtablesService.getOnCurrentDate(this.currentDate).subscribe((svtables: Svtable[]) => {
             this.svtables = svtables
             this.currentSvtable = svtables.length > 0 ? svtables[0] : null
 
-            this.svtablesService.getPerDayTables(this.currentDate).subscribe((tables: any[]) => {
+            this.svtablesService.getPerDayTables(this.dayBeforeDate).subscribe((tables: any[]) => {
                 this.dayBeforeSvtables = tables
                 this.dayBeforeCurrentSvtable = tables.find(t => t.svtableId === this.currentSvtable.svtableId)
 

@@ -1,5 +1,3 @@
-const { v4: uuidv4 } = require('uuid')
-
 const Svtable = require('../models/svtable.model')
 const CurrentDate = require('../models/currentDate.model')
 const PerdayTable = require('../models/perdayTable.model')
@@ -12,7 +10,7 @@ module.exports.create = async function (req, res) {
     }
 
     const svtable = new Svtable({
-        svtableId: uuidv4(),
+        svtableId: req.body.svtableId,
         svtableDate: req.body.svtableDate,
         name: req.body.name,
         exth: req.body.exth ? JSON.stringify(req.body.exth) : '',
@@ -37,18 +35,9 @@ module.exports.addNewSvatebles = async function (req, res) {
 
     const svtables = req.body
 
-    const svtable = new Svtable({
-        svtableId: uuidv4(),
-        svtableDate: req.body.svtableDate,
-        name: req.body.name,
-        exth: req.body.exth ? JSON.stringify(req.body.exth) : '',
-        cols: req.body.cols ? JSON.stringify(req.body.cols) : '',
-        rows: req.body.rows ? JSON.stringify(req.body.rows) : ''
-    });
-
     try {
         const svtables = req.body.map(table => new Svtable({
-            svtableId: uuidv4(),
+            svtableId: table.svtableId,
             svtableDate: table.svtableDate,
             name: table.name,
             exth: JSON.stringify(table.exth),
@@ -131,7 +120,7 @@ module.exports.uptateOne = async (req, res) => {
 
     try {
         const svtable = await Svtable.findOneAndUpdate(
-            { svtableId: req.params.svtableId },
+            { svtableId: req.body.svtableId, svtableDate: req.body.svtableDate },
             {
                 name: req.body.name,
                 exth: req.body.exth ? JSON.stringify(req.body.exth) : '',
@@ -148,7 +137,7 @@ module.exports.uptateOne = async (req, res) => {
 
 module.exports.removeOne = async (req, res) => {
     try {
-        const svtable = await Svtable.findOneAndRemove({ svtableId: req.params.svtableId });
+        const svtable = await Svtable.findOneAndRemove({ svtableId: req.params.svtableId, svtableDate: req.params.svtableDate });
         res.status(200).json(svtable);
     } catch (e) {
         res.status(404).send(e.message || 'Some error occurred while removing User.');
@@ -161,7 +150,7 @@ module.exports.updateOneRegion = async (req, res) => {
     }
 
     try {
-        const svtable = await Svtable.findOne({ svtableId: req.params.svtableId })
+        const svtable = await Svtable.findOne({ svtableId: req.params.svtableId, svtableDate: req.params.svtableDate })
         if (svtable) {
             const newRows = JSON.parse(svtable.rows).map(row => row.region === req.body.region ? req.body : row)
 
