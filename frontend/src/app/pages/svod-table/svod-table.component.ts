@@ -170,7 +170,7 @@ export class SvodTableComponent implements OnInit {
             const reg = new RegExp('^[A-Za-z(]')
             const reg2 = new RegExp(':')
             if (reg2.test(data[index])) {
-                return this.getPerDay(index, data[index], data)
+                return this.getPerDay(data[index], data)
             }
             if (reg.test(data[index])) {
                 return this.getValue(data[index], data)
@@ -186,11 +186,12 @@ export class SvodTableComponent implements OnInit {
 
     }
 
-    getPerDay(idx: number, value: string, data: string[]) {
+    getPerDay(value: string, data: string[]) {
         if (this.dayBeforeCurrentSvtable) {
             const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.reg === data[0])
             const today = this.getValue(value.split(':')[0], data)
-            const yesterday = regData[idx]
+            const yesterday = regData[this.utilsServive.letterToNumber(value.split(':')[1])]
+
             return _.toNumber(today) - _.toNumber(yesterday)
         }
         return 0
@@ -201,7 +202,7 @@ export class SvodTableComponent implements OnInit {
         if (col.type === 'formula' || col.type === 'percentage') {
             return this.getValue(value, data)
         } else if (col.type === 'perday') {
-            return this.getPerDay(col.idx, value, data)
+            return this.getPerDay(value, data)
         } else {
             return value
         }
