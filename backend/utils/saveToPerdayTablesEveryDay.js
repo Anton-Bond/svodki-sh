@@ -17,11 +17,12 @@ const letterToNumber = (str) => {
     return res
 }
 
-const getPerDay = (prevRows, idx, value, data) => {
+const getPerDay = (prevRows, value, data) => {
     if (prevRows) {
         const regData = prevRows.find(row => row.reg === data[0])
         const today = getValue(value.split(':')[0], data, prevRows)
-        const yesterday = regData[idx]
+        const yesterday = regData[letterToNumber(value.split(':')[1])]
+
         return _.toNumber(today) - _.toNumber(yesterday)
     }
     return 0
@@ -35,17 +36,17 @@ const getValue = (value, data, prevRows) => {
             const reg = new RegExp('^[A-Za-z(]')
             const reg2 = new RegExp(':')
             if (reg2.test(data[index])) {
-                return getPerDay(prevRows, index, data[index], data)
+                return getPerDay(prevRows, data[index], data)
             }
             if (reg.test(data[index])) {
                 return getValue(data[index], data, prevRows)
             }
 
-            return data[index] ? data[index] : null
+            return data[index] ? data[index] : 0
         })
-        return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : null
+        return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : 0
     } catch {
-        return null
+        return 0
     }
 
 }
@@ -55,7 +56,7 @@ const getCellValue = (prevRows, col, data) => {
     if (col.type === 'formula' || col.type === 'percentage') {
         return getValue(value, data, prevRows)
     } else if (col.type === 'perday') {
-        return getPerDay(prevRows, col.idx, value, data)
+        return prevRows.length > 0 ? getPerDay(prevRows, value, data) : 0
     } else {
         return value
     }
@@ -78,14 +79,13 @@ module.exports = async () => {
 
                 try {
                     const prevTable = prevTables.find(i => i.svtableId === t.svtableId)
-                    const prevRows = prevTable.rows ? JSON.parse(prevTable.rows) : []
-    
+                    const prevRows = prevTable ? JSON.parse(prevTable.rows) : []
+
                     rows.forEach(row => {
                         const newRow = { reg: row.data[0]}
                         cols.forEach(col => {
                             newRow[col.idx] = getCellValue(prevRows, col, row.data)
                         })
-                        console.log(' [log] newRow: ', newRow)
                         newRows.push(newRow)
                     })
                 } catch (err) {
