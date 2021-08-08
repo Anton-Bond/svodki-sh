@@ -190,7 +190,7 @@ export class SvodTableComponent implements OnInit {
         if (this.dayBeforeCurrentSvtable) {
             const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.reg === data[0])
             const today = this.getValue(value.split(':')[0], data)
-            const yesterday = regData[this.utilsServive.letterToNumber(value.split(':')[1])]
+            const yesterday = value.split(':')[1] ? regData[this.utilsServive.letterToNumber(value.split(':')[1])] : '0'
 
             return _.toNumber(today) - _.toNumber(yesterday)
         }

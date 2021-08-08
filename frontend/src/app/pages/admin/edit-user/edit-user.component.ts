@@ -96,7 +96,6 @@ export class EditUserComponent implements OnInit {
                 })
             },
             (e) => {
-                console.log('error >>', e)
                 this.messageService.add({ severity:'error', detail: 'Что-то пошло не так!' })
             }
             )
@@ -120,7 +119,6 @@ export class EditUserComponent implements OnInit {
                 })
             },
             (e) => {
-                console.log('error >>', e)
                 this.messageService.add({ severity:'error', detail: 'Что-то пошло не так!' })
             }
             )
