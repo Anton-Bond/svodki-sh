@@ -44,9 +44,9 @@ module.exports.addNewSvatebles = async function (req, res) {
             rows: JSON.stringify(table.rows)
         }))
         await Svtable.create(svtables)
-        res.status(201).send({success: 'true'})
+        res.status(201).json({success: 'true'})
     } catch (e) {
-        res.status(404).send(e.message || 'Some error occurred while creating svod tables.')
+        res.status(404).json(e.message || 'Some error occurred while creating svod tables.')
     }
 };
 

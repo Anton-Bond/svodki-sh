@@ -6,9 +6,14 @@ const userRoutes = require('./routes/userRouter')
 const authRoutes = require('./routes/authRouter')
 const svtableRoutes = require('./routes/svtableRouter')
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(require('cors')())
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
+    next()
+})
+
 
 // ===================== ROUTES ====================
 app.use('/api/user', userRoutes)
