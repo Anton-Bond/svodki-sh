@@ -93,7 +93,7 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
             try {
                 return eval(cod) ? _.round(_.toNumber(eval(cod)), 2) : '0'
             } catch {
-                return '?ошибка данных'
+                return '-'
             }
         } else {
             return value

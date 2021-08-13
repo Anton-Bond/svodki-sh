@@ -175,7 +175,7 @@ export class SvodTableComponent implements OnInit {
             if (reg.test(data[index])) {
                 return this.getValue(data[index], data)
             }
-            return data[index] ?  data[index] : '0'
+            return data[index] ?  data[index].replace(/,/, '.') : '0'
         })
         try {
             if (eval(cod) === Infinity) { return 'Дел_На_Ноль' }
