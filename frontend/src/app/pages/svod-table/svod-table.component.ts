@@ -165,7 +165,7 @@ export class SvodTableComponent implements OnInit {
     }
 
     getValue(value: string, data: string[]) {
-        const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+        const cod = typeof value === 'string' ? value.replace(/[A-Za-z]{1,2}/gi, match => {
             const index = this.utilsServive.letterToNumber(match)
             const reg = new RegExp('^[A-Za-z(]')
             const reg2 = new RegExp(':')
@@ -175,8 +175,9 @@ export class SvodTableComponent implements OnInit {
             if (reg.test(data[index])) {
                 return this.getValue(data[index], data)
             }
-            return data[index] ?  data[index].replace(/,/, '.') : '0'
-        })
+            return !data[index] ?  '0' : typeof data[index] === 'number' ? data[index] : data[index].replace(/,/, '.')
+        }) : value
+
         try {
             if (eval(cod) === Infinity) { return 'Дел_На_Ноль' }
             return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
