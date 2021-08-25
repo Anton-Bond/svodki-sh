@@ -134,17 +134,20 @@ export class SvodTableComponent implements OnInit {
 
     onUpdate(table: Svtable) {
         this.utilsService.setBlockContent(false)
-        this.svtables[this.activeTab] = table
+        // this.svtables[this.activeTab] = table
         this.viewMode = true
         this.editMode = false
         this.addNewMode = false
+        this.initData()
+        this.activeTab = 0
     }
 
     onAddNew(table: Svtable) {
         this.utilsService.setBlockContent(false)
-        const newTab = this.svtables.length
+        // const newTab = this.svtables.length
         this.svtables.push(table)
-        this.activeTab = newTab
+        // this.activeTab = newTab
+        this.activeTab = 0
         this.viewMode = true
         this.editMode = false
         this.addNewMode = false
@@ -165,18 +168,19 @@ export class SvodTableComponent implements OnInit {
     }
 
     getValue(value: string, data: string[]) {
-        const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+        const cod = typeof value === 'string' ? value.replace(/[A-Za-z]{1,2}/gi, match => {
             const index = this.utilsServive.letterToNumber(match)
             const reg = new RegExp('^[A-Za-z(]')
             const reg2 = new RegExp(':')
             if (reg2.test(data[index])) {
-                return this.getPerDay(index, data[index], data)
+                return this.getPerDay(data[index], data)
             }
             if (reg.test(data[index])) {
                 return this.getValue(data[index], data)
             }
-            return data[index] ?  data[index] : '0'
-        })
+            return !data[index] ?  '0' : typeof data[index] === 'number' ? data[index] : data[index].replace(/,/, '.')
+        }) : value
+
         try {
             if (eval(cod) === Infinity) { return 'Дел_На_Ноль' }
             return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
@@ -186,11 +190,12 @@ export class SvodTableComponent implements OnInit {
 
     }
 
-    getPerDay(idx: number, value: string, data: string[]) {
+    getPerDay(value: string, data: string[]) {
         if (this.dayBeforeCurrentSvtable) {
             const regData = this.dayBeforeCurrentSvtable.rows.find(row => row.reg === data[0])
             const today = this.getValue(value.split(':')[0], data)
-            const yesterday = regData[idx]
+            const yesterday = value.split(':')[1] && regData ? regData[this.utilsServive.letterToNumber(value.split(':')[1])] : '0'
+
             return _.toNumber(today) - _.toNumber(yesterday)
         }
         return 0
@@ -201,7 +206,7 @@ export class SvodTableComponent implements OnInit {
         if (col.type === 'formula' || col.type === 'percentage') {
             return this.getValue(value, data)
         } else if (col.type === 'perday') {
-            return this.getPerDay(col.idx, value, data)
+            return this.getPerDay(value, data)
         } else {
             return value
         }

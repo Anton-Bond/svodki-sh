@@ -67,7 +67,6 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
     toggleTab(idx: number) {
         this.activeTab = idx
         this.currentSvtable = this.getCurrentSvatableRegionData(this.svtables[idx])
-        console.log(this.currentSvtable)
     }
 
     toggleTabPrev() {
@@ -94,7 +93,7 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
             try {
                 return eval(cod) ? _.round(_.toNumber(eval(cod)), 2) : '0'
             } catch {
-                return '?ошибка данных'
+                return '-'
             }
         } else {
             return value
@@ -116,7 +115,7 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
 
     onSubmit() {
         this.noLess()
-        this.svtablesService.updateOneRegion(this.currentSvtable.svtableId, this.currentSvtable.rows[0]).subscribe(res => {
+        this.svtablesService.updateOneRegion(this.currentSvtable.svtableDate, this.currentSvtable.svtableId, this.currentSvtable.rows[0]).subscribe(res => {
             if (res.success === 'true') {
                 this.messageService.add({severity:'success', summary:'Успешно', detail:'Данные сохранены'})
             } else {

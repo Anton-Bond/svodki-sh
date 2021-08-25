@@ -49,7 +49,8 @@ export class UtilsService {
             return '#'
         }
         const cel = Math.floor(num / 27)
-        return (cel === 0 ? '' : String.fromCharCode(cel+96).toUpperCase()) + (String.fromCharCode(num-cel*26+96).toUpperCase())
+        const res = (cel === 0 ? '' : String.fromCharCode(cel+96).toUpperCase()) + (String.fromCharCode(num-cel*26+96).toUpperCase())
+        return num === 53 ? 'BA' : res
     }
 
     letterToNumber(str: string): number {

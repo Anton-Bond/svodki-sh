@@ -10,16 +10,10 @@ router.post('/new', controller.create)
 
 router.post('/addNewSvatebles', controller.addNewSvatebles)
 
-router.get('/:svtableDate', controller.findByDate)
-
 router.put('/:svtableId', controller.uptateOne)
 
-router.post('/on-current-date/:currentDate', controller.setOnCurrentDate)
+router.delete('/:svtableDate/:svtableId', controller.removeOne)
 
-router.delete('/:svtableId', controller.removeOne)
-
-router.put('/region/:svtableId', controller.updateOneRegion)
-
-// router.get('/:svtableId', controller.findById)
+router.put('/region/:svtableDate/:svtableId', controller.updateOneRegion)
 
 module.exports = router

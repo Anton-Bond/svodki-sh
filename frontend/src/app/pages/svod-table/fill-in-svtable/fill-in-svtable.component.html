@@ -21,7 +21,7 @@
             [value]="currentSvtable.rows"
             styleClass="p-datatable-gridlines p-datatable-sm"
             [resizableColumns]="true"
-            columnResizeMode="expand"
+            columnResizeMode="expand"[scrollable]="true"  scrollHeight="400px" scrollDirection="both"
         >
             <ng-template pTemplate="caption">
                 <div class="p-d-flex p-ai-center p-jc-between">
@@ -36,7 +36,21 @@
                 </div>
             </ng-template>
 
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" style="width:145px">
+                </colgroup>
+            </ng-template>
+
             <ng-template pTemplate="header" let-columns>
+                <tr *ngFor="let extHRow of currentSvtable.exth; let y=index">
+                    <th *ngFor="let extH of extHRow; let x=index" [attr.colspan]="extH.colspan">
+                        <section class="zx">
+                            {{extH.value || ''}}
+                        </section>
+                    </th>
+                </tr>
+
                 <tr>
                     <th pResizableColumn *ngFor="let col of columns">
                         {{col.header || '(пусто)'}}
@@ -44,7 +58,15 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-product>
+            <!-- <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th pResizableColumn *ngFor="let col of columns">
+                        {{col.header || '(пусто)'}}
+                    </th>
+                </tr>
+            </ng-template> -->
+
+            <!-- <ng-template pTemplate="body" let-product>
                 <tr>
                     <td pEditableColumn>
                         <p-cellEditor>
@@ -57,11 +79,11 @@
                         </p-cellEditor>
                     </td>
                 </tr>
-            </ng-template>
+            </ng-template> -->
 
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                    <td pEditableColumn *ngFor="let col of columns"  [ngStyle]="{'background-color': col.type === 'value'? 'inherit' : '#fff499'}">
+                    <td pEditableColumn *ngFor="let col of columns"  [ngStyle]="{'background-color': col.type === 'value'? 'inherit' : '#fff499', 'text-align': 'center'}">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input

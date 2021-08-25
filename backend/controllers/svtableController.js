@@ -1,5 +1,4 @@
 const Svtable = require('../models/svtable.model')
-const CurrentDate = require('../models/currentDate.model')
 const PerdayTable = require('../models/perdayTable.model')
 
 module.exports.create = async function (req, res) {
@@ -45,30 +44,9 @@ module.exports.addNewSvatebles = async function (req, res) {
             rows: JSON.stringify(table.rows)
         }))
         await Svtable.create(svtables)
-        res.status(201).send({success: 'true'})
+        res.status(201).json({success: 'true'})
     } catch (e) {
-        res.status(404).send(e.message || 'Some error occurred while creating svod tables.')
-    }
-};
-
-module.exports.findByDate = async (req, res) => {
-    try {
-        const svtable = await Svtable.findOne({ svtableDate: req.params.svtableDate })
-        if (svtable) {
-            const resTable = {
-                svtableId: svtable.svtableId,
-                svtableDate: svtable.svtableDate,
-                name: svtable.name,
-                exth: svtable.exth ? JSON.parse(svtable.exth) : [],
-                cols: svtable.cols ? JSON.parse(svtable.cols) : [],
-                rows: svtable.rows ? JSON.parse(svtable.rows) : []
-            }
-            res.status(200).json(resTable);
-        } else {
-            res.status(404).json({message: 'Svod table not found'});
-        }
-    } catch (e) {
-        res.status(404).send(e.message || 'Some error occurred while receiving svod table.');
+        res.status(404).json(e.message || 'Some error occurred while creating svod tables.')
     }
 };
 
@@ -151,11 +129,12 @@ module.exports.updateOneRegion = async (req, res) => {
 
     try {
         const svtable = await Svtable.findOne({ svtableId: req.params.svtableId, svtableDate: req.params.svtableDate })
+
         if (svtable) {
             const newRows = JSON.parse(svtable.rows).map(row => row.region === req.body.region ? req.body : row)
 
             const newSvtable = await Svtable.findOneAndUpdate(
-                { svtableId: req.params.svtableId },
+                { svtableId: req.params.svtableId, svtableDate: req.params.svtableDate },
                 { rows: JSON.stringify(newRows) },
                 { upsert: true }
             );
@@ -167,63 +146,3 @@ module.exports.updateOneRegion = async (req, res) => {
         res.status(404).send(e.message || 'Some error occurred while updating Svtable.');
     }
 };
-
-
-
-
-//   by CurrentDate
-
-module.exports.setOnCurrentDate = async (req, res) => {
-    const options = {
-        upsert: true
-    }
-    try {
-
-        const currentDate = await CurrentDate.findOneAndUpdate(
-            { date: req.params.currentDate },
-            { tableList: req.body.tableList },
-            options
-        );
-        res.status(201).json(currentDate);
-    } catch (e) {
-        res.status(404).send(e.message || 'Some went wrong from setOnCurrentDate')
-    }
-};
-
-// module.exports.allOnCurrentDate = async (req, res) => {
-//     try {
-//         const svtables = await CurrentDate.findOne({ date: req.params.currentDate })
-//             // .populate('tableList')
-
-//             // .exec((err, data) => {
-//             //     if (err) {
-//             //         return res.status(401).send(err.message || 'Some went wrong');
-//             //     }
-//             //     const result = data.tableList.map(t => ({
-//             //         svtableId: t.svtableId,
-//             //         svtableDate: t.svtableDate,
-//             //         name: t.name ? t.name : '',
-//             //         header: JSON.parse(t.header),
-//             //         data: JSON.parse(t.data)
-//             //     }))
-//             //     console.log(result)
-
-//             //     res.status(200).json(result)
-//             // })
-//             console.log('svtables', svtables)
-//         if (svtables) {
-//             const result = svtables.tableList.map(t => ({
-//                 svtableId: t.svtableId,
-//                 svtableDate: t.svtableDate,
-//                 name: t.name ? t.name : '',
-//                 cols: JSON.parse(t.cols),
-//                 rows: JSON.parse(t.rows)
-//             }))
-//             res.status(200).json(result)
-//         } else {
-//             res.status(404).json({message: 'Svod table not found'})
-//         }
-//     } catch (e) {
-//         res.status(404).send(e.message || 'Some error occurred while receiving svod table.')
-//     }
-// };

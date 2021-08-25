@@ -49,7 +49,6 @@ export class EditPassUserComponent implements OnInit {
                     });
                 },
                 (e) => {
-                    console.log('error >>', e)
                     this.messageService.add({ severity:'error', detail: 'Что-то пошло не так!' })
                 }
             )

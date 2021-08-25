@@ -12,6 +12,7 @@ export class FormulaInputModalComponent implements OnInit {
     formula: string = ''
     today: string = ''
     yesterday: string = ''
+    colTxt: string = ''
 
     constructor(
         public ref: DynamicDialogRef,
@@ -20,6 +21,7 @@ export class FormulaInputModalComponent implements OnInit {
 
     ngOnInit(): void {
         this.type = this.config.data.type
+        this.colTxt = this.config.data.colTxt
         if (this.config.data.type !== 'perday') {
             this.formula = this.config.data.formula
         } else {
@@ -30,8 +32,11 @@ export class FormulaInputModalComponent implements OnInit {
 
     onSave() {
         const reg = new RegExp('^[0-9]')
+        const reg2 = new RegExp('\\b' + this.colTxt + '\\b', 'i')
         if (reg.test(this.formula)) {
             alert('Формула не должна начинаться с числа!')
+        } else if (reg2.test(this.formula)) {
+            alert('Ошибка! Рекурсивный вызов!')
         } else {
             this.ref.close({
                 formula: this.config.data.type !== 'perday' ? this.formula : this.today + ':' + this.yesterday

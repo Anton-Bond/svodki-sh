@@ -191,13 +191,15 @@ export class EditSvtableComponent implements OnInit {
     }
 
     setFormula(type: string, idx: number, value: any) {
+        const colTxt = this.utilsService.numberToLetter(idx)
 
         const ref = this.dialogService.open(FormulaInputModalComponent, {
             data: {
                 type: type,
-                formula: value
+                formula: value,
+                colTxt
             },
-            header: 'Формула столбца: ' + this.utilsService.numberToLetter(idx),
+            header: 'Формула столбца: ' + colTxt,
             width: '30%'
         })
 
@@ -235,14 +237,13 @@ export class EditSvtableComponent implements OnInit {
     }
 
     cancelChanges() {
-        console.log(this.svtable)
         this.onCancel.emit()
     }
 
     removeOne() {
         const isDelete = confirm('Вы действительно хотите удалить таблицу безвозвратно?')
         if (isDelete) {
-                this.svtablesService.removeOne(this.svtable.svtableId).subscribe(svtable => {
+                this.svtablesService.removeOne(this.svtable.svtableDate, this.svtable.svtableId).subscribe(svtable => {
                 if (svtable) {
                     this.onRemove.emit(svtable.svtableId)
                     alert(`Таблица была удалена!`)
