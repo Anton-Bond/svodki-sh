@@ -62,7 +62,6 @@ export class EditSvtableComponent implements OnInit {
         if (this.editedSvtable) {
             this.editMode = true
             this.svtable = this.editedSvtable
-            console.log('>>> ', this.svtable.cols)
         } else {
             REGIONS.forEach(reg => {
                 this.initialRows.push({region: reg.code, data: [reg.name, '']})

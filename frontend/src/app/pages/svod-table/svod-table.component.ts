@@ -134,17 +134,20 @@ export class SvodTableComponent implements OnInit {
 
     onUpdate(table: Svtable) {
         this.utilsService.setBlockContent(false)
-        this.svtables[this.activeTab] = table
+        // this.svtables[this.activeTab] = table
         this.viewMode = true
         this.editMode = false
         this.addNewMode = false
+        this.initData()
+        this.activeTab = 0
     }
 
     onAddNew(table: Svtable) {
         this.utilsService.setBlockContent(false)
-        const newTab = this.svtables.length
+        // const newTab = this.svtables.length
         this.svtables.push(table)
-        this.activeTab = newTab
+        // this.activeTab = newTab
+        this.activeTab = 0
         this.viewMode = true
         this.editMode = false
         this.addNewMode = false
