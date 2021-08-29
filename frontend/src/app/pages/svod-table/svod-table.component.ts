@@ -221,6 +221,9 @@ export class SvodTableComponent implements OnInit {
                 if (_.isString(value) && value) {
                     return sum + _.toNumber(value.replace(/,/, '.'))
                 }
+                if (value) {
+                    return sum + value
+                }
                 return sum + 0
             }, 0)
 
