@@ -100,21 +100,21 @@ export class FillInSvtableComponent implements OnInit, OnDestroy {
         }
     }
 
-    noLess() {
-        if (this.dayBeforeCurrentSvtable) {
-            this.currentSvtable.cols.forEach((col, i) => {
-                if (col.type === 'value' && this.dayBeforeCurrentSvtable.cols[i].type === 'value') {
-                    this.currentSvtable.rows[0].data[col.idx] =
-                    _.toNumber(this.currentSvtable.rows[0].data[col.idx]) >= _.toNumber(this.dayBeforeCurrentSvtable.rows[0].data[col.idx])
-                        ? this.currentSvtable.rows[0].data[col.idx]
-                        : this.dayBeforeCurrentSvtable.rows[0].data[col.idx]
-                }
-            })
-        }
-    }
+    // noLess() {
+    //     if (this.dayBeforeCurrentSvtable) {
+    //         this.currentSvtable.cols.forEach((col, i) => {
+    //             if (col.type === 'value' && this.dayBeforeCurrentSvtable.cols[i].type === 'value') {
+    //                 this.currentSvtable.rows[0].data[col.idx] =
+    //                 _.toNumber(this.currentSvtable.rows[0].data[col.idx]) >= _.toNumber(this.dayBeforeCurrentSvtable.rows[0].data[col.idx])
+    //                     ? this.currentSvtable.rows[0].data[col.idx]
+    //                     : this.dayBeforeCurrentSvtable.rows[0].data[col.idx]
+    //             }
+    //         })
+    //     }
+    // }
 
     onSubmit() {
-        this.noLess()
+        // this.noLess()
         this.svtablesService.updateOneRegion(this.currentSvtable.svtableDate, this.currentSvtable.svtableId, this.currentSvtable.rows[0]).subscribe(res => {
             if (res.success === 'true') {
                 this.messageService.add({severity:'success', summary:'Успешно', detail:'Данные сохранены'})
