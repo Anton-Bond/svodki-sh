@@ -66,8 +66,31 @@ export class UtilsService {
         return res
     }
 
-    getCellValue(col: any, data: string[]): any {
+    getColTotal(col: any, svtable: Svtable, revDayTable: Svtable = undefined): any {
+        if (col.idx === 0) {
+            return 'Всего:'
+        } else {
+            const total = svtable.rows.reduce((sum, row) => {
+                const value = this.getCellValue(col, row.data, revDayTable)
+                if (_.isString(value) && value) {
+                    return sum + _.toNumber(value.replace(/,/, '.'))
+                }
+                if (_.isNumber(value) && value) {
+                    return sum + value
+                }
+                return sum + 0
+            }, 0)
+
+            return total ? _.round(total, 2) : 0
+        }
+    }
+
+    getCellValue(col: any, data: string[], revDayTable: Svtable = undefined): any {
         const value = data[col.idx]
+        if (col.type === 'perday') {
+            const perDay = this.getPerDay(value, data, revDayTable)
+            return perDay ? _.round(perDay, 2) : 0
+        }
         if (col.type === 'formula' || col.type === 'percentage') {
             const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
                 const idx = this.letterToNumber(match)
@@ -83,23 +106,41 @@ export class UtilsService {
         }
     }
 
-    getColTotal(col: any, svtable: Svtable): any {
-        if (col.idx === 0) {
-            return 'Всего:'
-        } else {
-            const total = svtable.rows.reduce((sum, row) => {
-                const value = this.getCellValue(col, row.data)
-                if (_.isString(value) && value) {
-                    return sum + _.toNumber(value.replace(/,/, '.'))
-                }
-                return sum + 0
-            }, 0)
+    getPerDay(value: string, data: string[], prevDayTable: Svtable = undefined) {
+        if (prevDayTable && value) {
+            const regData = prevDayTable.rows.find(row => row.reg === data[0])
+            const today = this.getValue(value.split(':')[0], data)
+            const yesterday = value.split(':')[1] && regData ? regData[this.letterToNumber(value.split(':')[1])] : '0'
 
-            return total ? _.round(total, 2) : 0
+            return _.toNumber(today) - _.toNumber(yesterday)
         }
+        return 0
     }
 
-    svtableToSheet(table: Svtable): any {
+    getValue(value: string, data: string[], prevDayTable: Svtable = undefined) {
+        const cod = typeof value === 'string' ? value.replace(/[A-Za-z]{1,2}/gi, match => {
+            const index = this.letterToNumber(match)
+            const reg = new RegExp('^[A-Za-z(]')
+            const reg2 = new RegExp(':')
+            if (reg2.test(data[index])) {
+                return this.getPerDay(data[index], data, prevDayTable)
+            }
+            if (reg.test(data[index])) {
+                return this.getValue(data[index], data)
+            }
+            return !data[index] ?  '0' : typeof data[index] === 'number' ? data[index] : data[index].replace(/,/, '.')
+        }) : value
+
+        try {
+            if (eval(cod) === Infinity) { return 'Дел_На_Ноль' }
+            return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
+        } catch {
+            return 'Ошиб_Формулы'
+        }
+
+    }
+
+    svtableToSheet(table: Svtable, prevDayTable: Svtable): any {
         const result = []
 
         const exth = []
@@ -120,7 +161,7 @@ export class UtilsService {
             if (col.type === 'percentage') {
                 return table.rows[0].data[col.idx]
             } else {
-                return this.getColTotal(col, table)
+                return this.getColTotal(col, table, prevDayTable)
             }
         })
         total.unshift('Всего:')
@@ -132,7 +173,14 @@ export class UtilsService {
             }
         })
         const data = table.rows.map(
-            row => row.data.map((_, i) => i === 0 ? row.data[0] : this.getCellValue(table.cols[i-1], row.data))
+            // row => row.data.map((_, i) => i === 0 ? row.data[0] : this.getCellValue(table.cols[i-1], row.data))
+            row => row.data.map((_, i) => {
+                if (i === 0) return row.data[0];
+                if (table.cols[i-1]?.type === 'perday') {
+                    return this.getPerDay(row.data[i], row.data, prevDayTable);
+                }
+                return this.getCellValue(table.cols[i-1], row.data);
+            })
         )
 
         return XLSX.utils.aoa_to_sheet(result.concat([['', table.name]], [['']], exth, [header], data, [total]))

@@ -291,7 +291,7 @@ export class SvodTableComponent implements OnInit {
     exportExcel() {
         const wb: XLSX.WorkBook = XLSX.utils.book_new()
         this.svtables.forEach((table, i) => {
-            const ws: XLSX.WorkSheet = this.utilsService.svtableToSheet(table)
+            const ws: XLSX.WorkSheet = this.utilsService.svtableToSheet(table, this.dayBeforeSvtables.find(t => t.svtableId === table.svtableId))
             XLSX.utils.book_append_sheet(wb, ws, `${i+1}.${_.truncate(table.name, {'length': 15})}`)
         })
 
