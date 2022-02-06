@@ -49,8 +49,57 @@ export class UtilsService {
             return '#'
         }
         const cel = Math.floor(num / 27)
-        const res = (cel === 0 ? '' : String.fromCharCode(cel+96).toUpperCase()) + (String.fromCharCode(num-cel*26+96).toUpperCase())
-        return num === 53 ? 'BA' : res
+        // const res = (cel === 0 ? '' : String.fromCharCode(cel+96).toUpperCase()) + (String.fromCharCode(num-cel*26+96).toUpperCase())
+        if (num === 53) {
+            return 'BA'
+
+        } else if (num === 79) {
+            return 'CA'
+        } else if (num === 80) {
+            return 'CB'
+
+        } else if (num === 105) {
+            return 'DA'
+        } else if (num === 106) {
+            return 'DB'
+        } else if (num === 107) {
+            return 'DC'
+
+        } else if (num === 131) {
+            return 'EA'
+        } else if (num === 132) {
+            return 'EB'
+        } else if (num === 133) {
+            return 'EC'
+        } else if (num === 134) {
+            return 'ED'
+
+        } else if (num === 157) {
+            return 'FA'
+        } else if (num === 158) {
+            return 'FB'
+        } else if (num === 159) {
+            return 'FC'
+        } else if (num === 160) {
+            return 'FD'
+        } else if (num === 161) {
+            return 'FE'
+
+        } else if (num === 183) {
+            return 'GA'
+        } else if (num === 184) {
+            return 'GB'
+        } else if (num === 185) {
+            return 'GC'
+        } else if (num === 186) {
+            return 'GD'
+        } else if (num === 187) {
+            return 'GE'
+        } else if (num === 188) {
+            return 'GE'
+        }
+
+        return (cel === 0 ? '' : String.fromCharCode(cel+96).toUpperCase()) + (String.fromCharCode(num-cel*26+96).toUpperCase())
     }
 
     letterToNumber(str: string): number {
@@ -92,15 +141,16 @@ export class UtilsService {
             return perDay ? _.round(perDay, 2) : 0
         }
         if (col.type === 'formula' || col.type === 'percentage') {
-            const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
-                const idx = this.letterToNumber(match)
-                return data[idx] ?  data[idx] : '0'
-            })
-            try {
-                return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
-            } catch {
-                return '?ошибка формулы'
-            }
+            // const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
+            //     const idx = this.letterToNumber(match)
+            //     return data[idx] ?  data[idx] : '0'
+            // })
+            // try {
+            //     return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
+            // } catch {
+            //     return '?ошибка формулы'
+            // }
+            return this.getValue(value, data)
         } else {
             return value
         }
@@ -109,10 +159,11 @@ export class UtilsService {
     getPerDay(value: string, data: string[], prevDayTable: Svtable = undefined) {
         if (prevDayTable && value) {
             const regData = prevDayTable.rows.find(row => row.reg === data[0])
-            const today = this.getValue(value.split(':')[0], data)
+            const today = this.getValue(value.split(':')[0], data, prevDayTable)
             const yesterday = value.split(':')[1] && regData ? regData[this.letterToNumber(value.split(':')[1])] : '0'
+            const result = _.toNumber(today) - _.toNumber(yesterday)
 
-            return _.toNumber(today) - _.toNumber(yesterday)
+            return result
         }
         return 0
     }
@@ -179,7 +230,7 @@ export class UtilsService {
                 if (table.cols[i-1]?.type === 'perday') {
                     return this.getPerDay(row.data[i], row.data, prevDayTable);
                 }
-                return this.getCellValue(table.cols[i-1], row.data);
+                return this.getCellValue(table.cols[i-1], row.data, prevDayTable);
             })
         )
 
