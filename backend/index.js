@@ -25,6 +25,10 @@ const start = async () => {
 
 start()
 
-cron.schedule('00 23 * * *', () => {
+// CRON JOB
+const HH = process.env.CRON_JOB_HH
+const MM = process.env.CRON_JOB_MM
+
+cron.schedule(`${MM} ${HH} * * *`, () => {
     saveToPerdayTablesEveryDay()
 })
