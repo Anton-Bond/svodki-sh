@@ -163,7 +163,7 @@ export class UtilsService {
             const yesterday = value.split(':')[1] && regData ? regData[this.letterToNumber(value.split(':')[1])] : '0'
             const result = _.toNumber(today) - _.toNumber(yesterday)
 
-            return result
+            return result ? _.round(result, 2) : 0
         }
         return 0
     }
@@ -225,12 +225,17 @@ export class UtilsService {
         })
         const data = table.rows.map(
             // row => row.data.map((_, i) => i === 0 ? row.data[0] : this.getCellValue(table.cols[i-1], row.data))
+
             row => row.data.map((_, i) => {
-                if (i === 0) return row.data[0];
-                if (table.cols[i-1]?.type === 'perday') {
-                    return this.getPerDay(row.data[i], row.data, prevDayTable);
+                if (i === 0) {
+                    return row.data[0].toString().replace(/\./, ',');
                 }
-                return this.getCellValue(table.cols[i-1], row.data, prevDayTable);
+
+                if (table.cols[i-1]?.type === 'perday') {
+                    return this.getPerDay(row.data[i], row.data, prevDayTable).toString().replace(/\./, ',');
+                }
+
+                return this.getCellValue(table.cols[i-1], row.data, prevDayTable).toString().replace(/\./, ',');
             })
         )
 
