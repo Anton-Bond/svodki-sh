@@ -209,7 +209,7 @@ export class SvodTableComponent implements OnInit {
         } else if (col.type === 'perday') {
             return this.getPerDay(value, data)
         } else {
-            return value
+            return value.replace(/,/, '.') || value;
         }
     }
 

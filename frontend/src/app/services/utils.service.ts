@@ -141,18 +141,9 @@ export class UtilsService {
             return perDay ? _.round(perDay, 2) : 0
         }
         if (col.type === 'formula' || col.type === 'percentage') {
-            // const cod = value.replace(/[A-Za-z]{1,2}/gi, match => {
-            //     const idx = this.letterToNumber(match)
-            //     return data[idx] ?  data[idx] : '0'
-            // })
-            // try {
-            //     return eval(cod) ? _.toString(_.round(_.toNumber(eval(cod)), 2)) : '0'
-            // } catch {
-            //     return '?ошибка формулы'
-            // }
             return this.getValue(value, data)
         } else {
-            return value
+            return value.replace(/,/, '.') || value;
         }
     }
 
@@ -224,18 +215,18 @@ export class UtilsService {
             }
         })
         const data = table.rows.map(
-            // row => row.data.map((_, i) => i === 0 ? row.data[0] : this.getCellValue(table.cols[i-1], row.data))
-
-            row => row.data.map((_, i) => {
+            row => row.data.map((_item, i) => {
                 if (i === 0) {
-                    return row.data[0].toString().replace(/\./, ',');
+                    return row.data[0];
                 }
 
                 if (table.cols[i-1]?.type === 'perday') {
-                    return this.getPerDay(row.data[i], row.data, prevDayTable).toString().replace(/\./, ',');
+                    const res = _.toNumber(this.getPerDay(row.data[i], row.data, prevDayTable));
+                    return res || 0;
                 }
 
-                return this.getCellValue(table.cols[i-1], row.data, prevDayTable).toString().replace(/\./, ',');
+                const res = _.toNumber(this.getCellValue(table.cols[i-1], row.data, prevDayTable));
+                return res || 0;
             })
         )
 
